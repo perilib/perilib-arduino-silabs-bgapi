@@ -12,8 +12,9 @@ class SilabsBGAPIDevice : public SerialDevice
 {
 public:
     SilabsBGAPIDevice(::Stream *arduinoStream)
-            : pargen(&protocol),
-              stream(arduinoStream, &pargen) { }
+            : SerialDevice(&stream),
+              pargen(&protocol),
+              stream(arduinoStream, &pargen, this) { }
     
 protected:
     SilabsBGAPIProtocol protocol;
