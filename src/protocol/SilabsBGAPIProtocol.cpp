@@ -4,6 +4,12 @@
 namespace Perilib
 {
 
+SilabsBGAPIProtocol::SilabsBGAPIProtocol()
+{
+    incomingPacketTimeoutMs = 500;
+    responsePacketTimeoutMs = 1200;
+}
+
 int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t length, uint8_t newByte, StreamParserGenerator *parserGenerator, bool isTx)
 {
     // make sure we have at least the header (3 buffer bytes + 1 new byte)
