@@ -8,18 +8,18 @@
 namespace Perilib
 {
 
-class SilabsBGAPIDevice : public SerialDevice
+class SilabsBGAPIDevice : public StreamDevice
 {
 public:
-    SilabsBGAPIDevice(::Stream *arduinoStream)
-            : SerialDevice(&stream),
-              pargen(&protocol),
-              stream(arduinoStream, &pargen, this) { }
+    SilabsBGAPIDevice(::Stream *arduinoUart)
+            : StreamDevice(&stream),
+              parserGenerator(&protocol),
+              stream(arduinoUart, &parserGenerator, this) { }
     
 protected:
     SilabsBGAPIProtocol protocol;
-    StreamParserGenerator pargen;
-    SerialStream stream;
+    StreamParserGenerator parserGenerator;
+    UartStream stream;
 };
 
 } // namespace Perilib
