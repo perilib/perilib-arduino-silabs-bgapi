@@ -1,9 +1,9 @@
-#ifndef __PERILIB_HAL_SILABSBGAPIDEVICE_H__
-#define __PERILIB_HAL_SILABSBGAPIDEVICE_H__
+#ifndef __PERILIB_SILABSBGAPIDEVICE_H__
+#define __PERILIB_SILABSBGAPIDEVICE_H__
 
 #include <Perilib.h>
 
-#include "protocol/SilabsBGAPIProtocol.h"
+#include "SilabsBGAPIProtocol.h"
 
 namespace Perilib
 {
@@ -24,4 +24,4 @@ protected:
 
 } // namespace Perilib
 
-#endif /* __PERILIB_HAL_SILABSBGAPIDEVICE_H__ */
+#endif /* __PERILIB_SILABSBGAPIDEVICE_H__ */

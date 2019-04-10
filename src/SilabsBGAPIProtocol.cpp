@@ -1,5 +1,5 @@
-#include "protocol/SilabsBGAPIProtocol.h"
-#include "protocol/SilabsBGAPIPacket.h"
+#include "SilabsBGAPIProtocol.h"
+#include "SilabsBGAPIPacket.h"
 
 namespace Perilib
 {

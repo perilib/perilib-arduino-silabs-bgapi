@@ -5,9 +5,8 @@
 
 #include <Perilib.h>
 
-#include "protocol/SilabsBGAPIPacket.h"
-#include "protocol/SilabsBGAPIProtocol.h"
-
-#include "hal/SilabsBGAPIDevice.h"
+#include "SilabsBGAPIDevice.h"
+#include "SilabsBGAPIProtocol.h"
+#include "SilabsBGAPIPacket.h"
 
 #endif /* __PERILIB_SILABS_BGAPI_H__ */
