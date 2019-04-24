@@ -30,6 +30,12 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
 
 int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
+    // ensure packet is not null
+    if (!packet) return -1;
+    
+    // pointer packet buffer at RX buffer
+    packet->buffer = buffer;
+    
     Serial.print("PACKET: [ ");
     uint16_t i;
     for (i = 0; i < length; i++)
