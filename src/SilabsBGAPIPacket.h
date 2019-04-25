@@ -15,6 +15,8 @@ public:
         uint8_t groupId;
         uint8_t methodId;
     } __attribute__((packed)) header_t;
+    
+    inline uint16_t getPayloadLength() { return header ? (header->length + ((uint16_t)(header->type & 0x07) << 8)) : 0; }
 
     header_t *header;
 
