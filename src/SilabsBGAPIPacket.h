@@ -9,12 +9,14 @@ namespace Perilib
 class SilabsBGAPIPacket : public StreamPacket
 {
 public:
-    struct {
-        uint8_t messageType;
-        uint8_t technologyType;
+    typedef struct {
+        uint8_t type;
+        uint8_t length;
         uint8_t groupId;
         uint8_t methodId;
-    } metadata;
+    } __attribute__((packed)) header_t;
+
+    header_t *header;
 
 };
 

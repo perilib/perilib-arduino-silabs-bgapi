@@ -36,6 +36,9 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
     // pointer packet buffer at RX buffer
     packet->buffer = buffer;
     
+    // fill in header data
+    ((SilabsBGAPIPacket *)packet)->header = (SilabsBGAPIPacket::header_t *)packet->buffer;
+    
     Serial.print("PACKET: [ ");
     uint16_t i;
     for (i = 0; i < length; i++)
