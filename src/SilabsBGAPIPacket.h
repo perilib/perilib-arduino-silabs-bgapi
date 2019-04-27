@@ -30,6 +30,8 @@ public:
         uint8_t methodId;
     } __attribute__((packed)) header_t;
     
+    inline uint8_t getMessageType() { return header ? (header->type >> 7) : 0; }
+    inline uint8_t getTechnologyType() { return header ? (header->type >> 3) & 0x7 : 0; }
     inline uint16_t getPayloadLength() { return header ? (header->length + ((uint16_t)(header->type & 0x07) << 8)) : 0; }
 
     header_t *header;
