@@ -59,7 +59,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
             }
             
             // jump to next command definition
-            search += search[2] + 3;
+            search += search[2] + search[3] + 4;
         }
         
         // if we didn't couldn't identify the packet, stop here
@@ -106,21 +106,26 @@ int8_t SilabsBGAPIProtocol::getPacketFromNameAndArgs(StreamPacket *packet, const
 
 const uint8_t SilabsBGAPIProtocol::bleProtocolCommandTable[] =
 {
+    /* system_hello (ID=0/1) */
+        /* group_id */      0x00,
+        /* method_id */     0x01,
+        /* outarg_count */  0x00,
+        /* inarg_count */   0x00,
 };
 
 const uint8_t SilabsBGAPIProtocol::bleProtocolEventTable[] =
 {
     /* system_boot (ID=0/0) */
-        /* group_id */  0x00,
-        /* method_id */ 0x00,
-        /* arg_count */ 0x07,
-        /* evta[0] */   StreamProtocol::UINT16, /* uint16 major */
-        /* evta[1] */   StreamProtocol::UINT16, /* uint16 minor */
-        /* evta[0] */   StreamProtocol::UINT16, /* uint16 patch */
-        /* evta[2] */   StreamProtocol::UINT16, /* uint16 build */
-        /* evta[3] */   StreamProtocol::UINT16, /* uint8 ll_version */
-        /* evta[4] */   StreamProtocol::UINT8,  /* uint8 protocol_version */
-        /* evta[5] */   StreamProtocol::UINT8,  /* uint8 hw */
+        /* group_id */      0x00,
+        /* method_id */     0x00,
+        /* inarg_count */   0x07,
+        /* evta[0] */       StreamProtocol::UINT16, /* uint16 major */
+        /* evta[1] */       StreamProtocol::UINT16, /* uint16 minor */
+        /* evta[2] */       StreamProtocol::UINT16, /* uint16 patch */
+        /* evta[3] */       StreamProtocol::UINT16, /* uint16 build */
+        /* evta[4] */       StreamProtocol::UINT16, /* uint16 ll_version */
+        /* evta[5] */       StreamProtocol::UINT8,  /* uint8 protocol_version */
+        /* evta[6] */       StreamProtocol::UINT8,  /* uint8 hw */
 };
 
 } // namespace Perilib
