@@ -101,6 +101,25 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
 
 int8_t SilabsBGAPIProtocol::getPacketFromNameAndArgs(StreamPacket *packet, const char *packetName, StreamParserGenerator *parserGenerator, ...)
 {
+    // TODO: THIS
+    return 0;
+}
+
+int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, uint8_t **packetDef)
+{
+    // TODO: THIS
+    return -1;
+}
+
+uint8_t SilabsBGAPIProtocol::getArgumentCount(uint8_t *packetDef)
+{
+    // TODO: THIS
+    return 0;
+}
+
+uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint8_t *packetDef)
+{
+    // TODO: THIS
     return 0;
 }
 
