@@ -20,6 +20,7 @@ public:
     } __attribute__((packed)) ble_evt_system_boot_t;
 
     typedef union {
+        uint8_t buffer[];
         ble_evt_system_boot_t ble_evt_system_boot;
     } payload_t;
     
