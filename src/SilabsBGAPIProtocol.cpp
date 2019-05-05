@@ -111,16 +111,24 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     if (!packetDef) return -1;
     
     // determine correct look-up table and search range, assume commands
+    // (table 0 is commands, table 1 is responses, table 2 is events)
     const uint8_t *search = SilabsBGAPIProtocol::bleProtocolCommandTable;
     uint16_t max = BLE_IDX_CMD_MAX;
-    uint8_t tableId = 0;
-    if (index > BLE_IDX_CMD_MAX)
+    uint8_t table = 0;
+    if (index > BLE_IDX_RSP_MAX)
     {
         // switch to event table
         search = SilabsBGAPIProtocol::bleProtocolEventTable;
+        index -= (BLE_IDX_RSP_MAX + 1);
+        max = BLE_IDX_EVT_MAX - (BLE_IDX_RSP_MAX + 1);
+        table = 2;
+    }
+    else if (index > BLE_IDX_CMD_MAX)
+    {
+        // switch to response table (same as command but with index offsets)
         index -= (BLE_IDX_CMD_MAX + 1);
-        max = BLE_IDX_EVT_MAX - (BLE_IDX_CMD_MAX + 1);
-        tableId = 1;
+        max = BLE_IDX_RSP_MAX - (BLE_IDX_CMD_MAX + 1);
+        table = 1;
     }
     
     // abort if requested packet is out of range
@@ -130,7 +138,7 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     uint16_t i;
     for (i = 0; i < index; i++)
     {
-        if (tableId == 0)
+        if (table == 0 || table == 1)
         {
             // 4 bytes fixed definition size + [out] command args, [in] response args (8th bit masked)
             search += 4 + search[2] + (search[3] & 0x7F);
@@ -149,15 +157,35 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
 
 uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *packetDef)
 {
-    if (packetDef) return packetDef[2];
-    else return 0;
+    if (!packetDef) return 0;
+    if (index < BLE_IDX_CMD_MAX || index > BLE_IDX_RSP_MAX)
+    {
+        return packetDef[2]; // outgoing command or incoming event arguments
+    }
+    else
+    {
+        return packetDef[3]; // incoming response arguments
+    }
 }
 
 const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8_t *packetDef)
 {
     if (!packetDef) return 0;
-    if (index < BLE_IDX_CMD_MAX) return &packetDef[4];
-    return &packetDef[3];
+    if (index < BLE_IDX_CMD_MAX)
+    {
+        // command (found in command table, 1st half of each packet definition)
+        return &packetDef[4];
+    }
+    else if (index < BLE_IDX_RSP_MAX)
+    {
+        // response (found in command table, 2nd half of each packet definition)
+        return &packetDef[4 + packetDef[2]];
+    }
+    else
+    {
+        // event (found in event table)
+        return &packetDef[3];
+    }
 }
 
 const uint8_t SilabsBGAPIProtocol::bleProtocolCommandTable[] =
@@ -174,6 +202,15 @@ const uint8_t SilabsBGAPIProtocol::bleProtocolCommandTable[] =
         /* method_id */     0x01,
         /* outarg_count */  0x00,
         /* inarg_count */   0x00,
+        
+    /* system_whitelist_append (ID=0/10) */
+        /* group_id */      0x00,
+        /* method_id */     0x0A,
+        /* outarg_count */  0x02,
+        /* inarg_count */   0x01,
+        /* cmda[0] */       MACADDR,
+        /* cmda[1] */       UINT8,
+        /* rspa[0] */       UINT16,
 };
 
 const uint8_t SilabsBGAPIProtocol::bleProtocolEventTable[] =
