@@ -13,11 +13,12 @@ class SilabsBGAPIDevice : public StreamDevice
 public:
     SilabsBGAPIDevice(::Stream *arduinoUart)
             : StreamDevice(&stream),
-              parserGenerator(&protocol, rxBuffer, sizeof(rxBuffer)),
+              parserGenerator(&protocol, rxBuffer, sizeof(rxBuffer), txBuffer, sizeof(txBuffer)),
               stream(arduinoUart, &parserGenerator, this) { }
     
 protected:
     uint8_t rxBuffer[256];
+    uint8_t txBuffer[256];
     SilabsBGAPIProtocol protocol;
     StreamParserGenerator parserGenerator;
     UartStream stream;
