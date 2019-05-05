@@ -147,16 +147,17 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     return 0;
 }
 
-uint8_t SilabsBGAPIProtocol::getArgumentCount(const uint8_t *packetDef)
+uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *packetDef)
 {
     if (packetDef) return packetDef[2];
     else return 0;
 }
 
-const uint8_t *SilabsBGAPIProtocol::getFirstArgument(const uint8_t *packetDef)
+const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8_t *packetDef)
 {
-    if (packetDef) return &packetDef[4];
-    return 0;
+    if (!packetDef) return 0;
+    if (index < BLE_IDX_CMD_MAX) return &packetDef[4];
+    return &packetDef[3];
 }
 
 const uint8_t SilabsBGAPIProtocol::bleProtocolCommandTable[] =

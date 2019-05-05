@@ -23,8 +23,8 @@ public:
     virtual int8_t getPacketFromBuffer(StreamPacket *packet, const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator=0, bool isTx=false);
     virtual int8_t getPacketFromNameAndArgs(StreamPacket *packet, const char *packetName, StreamParserGenerator *parserGenerator=0, ...);
     virtual int8_t getPacketDefinition(uint16_t index, const uint8_t **packetDef);
-    virtual uint8_t getArgumentCount(const uint8_t *packetDef);
-    virtual const uint8_t *getFirstArgument(const uint8_t *packetDef);
+    virtual uint8_t getArgumentCount(uint16_t index, const uint8_t *packetDef);
+    virtual const uint8_t *getFirstArgument(uint16_t index, const uint8_t *packetDef);
 
 private:
     static const uint8_t bleProtocolCommandTable[];
