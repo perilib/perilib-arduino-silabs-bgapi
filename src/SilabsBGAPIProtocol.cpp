@@ -10,8 +10,8 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
     if (length > 3)
     {
         // check 11-bit "length" field in 4-byte header
-        uint16_t payload_length = ((buffer[0] & 0x03) << 8) + buffer[1];
-        if (length == (payload_length + 4))
+        uint16_t payloadLength = ((buffer[0] & 0x03) << 8) + buffer[1];
+        if (length == (payloadLength + 4))
         {
             // existing buffer plus new byte is expected length
             return ParseStatus::COMPLETE;
