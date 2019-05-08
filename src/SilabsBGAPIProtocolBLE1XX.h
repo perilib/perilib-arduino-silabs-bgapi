@@ -13,18 +13,18 @@ class SilabsBGAPIProtocolBLE1XX : public SilabsBGAPIProtocol
 public:
     // {{ START perilib_protocol_cpp_index_enum_list }}
     enum packet_idx_t {
-        BLE_IDX_CMD_SYSTEM_RESET,
-        BLE_IDX_CMD_SYSTEM_HELLO,
-        BLE_IDX_CMD_SYSTEM_WHITELIST_APPEND,
-        BLE_IDX_CMD_MAX,
+        BLE_CMD_SYSTEM_RESET,
+        BLE_CMD_SYSTEM_HELLO,
+        BLE_CMD_SYSTEM_WHITELIST_APPEND,
+        BLE_CMD_MAX,
         
-        BLE_IDX_RSP_SYSTEM_RESET,
-        BLE_IDX_RSP_SYSTEM_HELLO,
-        BLE_IDX_RSP_SYSTEM_WHITELIST_APPEND,
-        BLE_IDX_RSP_MAX,
+        BLE_RSP_SYSTEM_RESET,
+        BLE_RSP_SYSTEM_HELLO,
+        BLE_RSP_SYSTEM_WHITELIST_APPEND,
+        BLE_RSP_MAX,
         
-        BLE_IDX_EVT_SYSTEM_BOOT,
-        BLE_IDX_EVT_MAX
+        BLE_EVT_SYSTEM_BOOT,
+        BLE_EVT_MAX
     };
     // {{ END perilib_protocol_cpp_index_enum_list }}
     
@@ -32,7 +32,7 @@ public:
     // {{ END perilib_protocol_cpp_packet_struct_set }}
 
     SilabsBGAPIProtocolBLE1XX()
-            : SilabsBGAPIProtocol(commandTable, eventTable, BLE_IDX_CMD_MAX, BLE_IDX_RSP_MAX, BLE_IDX_EVT_MAX) { }
+            : SilabsBGAPIProtocol(commandTable, eventTable, BLE_CMD_MAX, BLE_RSP_MAX, BLE_EVT_MAX) { }
 
 private:
     static const uint8_t commandTable[];
