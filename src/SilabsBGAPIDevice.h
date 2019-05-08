@@ -19,7 +19,7 @@ public:
         uint8_t *txBuffer,
         uint16_t txBufferSize)
             : StreamDevice(&stream),
-              parserGenerator(protocol, rxBuffer, sizeof(rxBuffer), txBuffer, sizeof(txBuffer)),
+              parserGenerator(protocol, rxBuffer, rxBufferSize, txBuffer, txBufferSize),
               stream(arduinoUart, &parserGenerator, this) { }
     
 protected:
