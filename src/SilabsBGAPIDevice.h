@@ -11,15 +11,18 @@ namespace Perilib
 class SilabsBGAPIDevice : public StreamDevice
 {
 public:
-    SilabsBGAPIDevice(::Stream *arduinoUart)
+    SilabsBGAPIDevice(
+        ::Stream *arduinoUart,
+        SilabsBGAPIProtocol *protocol,
+        uint8_t *rxBuffer,
+        uint16_t rxBufferSize,
+        uint8_t *txBuffer,
+        uint16_t txBufferSize)
             : StreamDevice(&stream),
-              parserGenerator(&protocol, rxBuffer, sizeof(rxBuffer), txBuffer, sizeof(txBuffer)),
+              parserGenerator(protocol, rxBuffer, sizeof(rxBuffer), txBuffer, sizeof(txBuffer)),
               stream(arduinoUart, &parserGenerator, this) { }
     
 protected:
-    uint8_t rxBuffer[256];
-    uint8_t txBuffer[256];
-    SilabsBGAPIProtocol protocol;
     StreamParserGenerator parserGenerator;
     UartStream stream;
 };

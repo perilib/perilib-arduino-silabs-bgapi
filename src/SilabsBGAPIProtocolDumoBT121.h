@@ -3,6 +3,8 @@
 
 #include <Perilib.h>
 
+#include "SilabsBGAPIProtocol.h"
+
 namespace Perilib
 {
     

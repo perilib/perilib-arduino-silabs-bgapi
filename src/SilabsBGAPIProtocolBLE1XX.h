@@ -3,6 +3,8 @@
 
 #include <Perilib.h>
 
+#include "SilabsBGAPIProtocol.h"
+
 namespace Perilib
 {
     
@@ -28,6 +30,9 @@ public:
     
     // {{ START perilib_protocol_cpp_packet_struct_set }}
     // {{ END perilib_protocol_cpp_packet_struct_set }}
+
+    SilabsBGAPIProtocolBLE1XX()
+            : SilabsBGAPIProtocol(commandTable, eventTable, BLE_IDX_CMD_MAX, BLE_IDX_RSP_MAX, BLE_IDX_EVT_MAX) { }
 
 private:
     static const uint8_t commandTable[];

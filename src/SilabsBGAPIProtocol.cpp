@@ -4,12 +4,6 @@
 namespace Perilib
 {
 
-SilabsBGAPIProtocol::SilabsBGAPIProtocol()
-{
-    incomingPacketTimeoutMs = 500;
-    responsePacketTimeoutMs = 1200;
-}
-
 int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
     // make sure we have at least the header (4 bytes)
@@ -46,8 +40,8 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
     if ((buffer[0] >> 7) == 0)
     {
         // messageType == 0, command (TX) or response (RX)
-        search = bleProtocolCommandTable;
-        for (i = 0; i < BLE_IDX_CMD_MAX; i++)
+        search = commandTable;
+        for (i = 0; i < maxCommandIndex; i++)
         {
             // check for match
             if (search[0] == buffer[2] && search[1] == buffer[3])
@@ -63,13 +57,13 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
         }
         
         // if we didn't couldn't identify the packet, stop here
-        if (i == BLE_IDX_CMD_MAX) return -2;
+        if (i == maxCommandIndex) return -2;
     }
     else
     {
         // messageType == 1, event (RX)
-        search = bleProtocolEventTable;
-        for (i = 0; i < BLE_IDX_EVT_MAX; i++)
+        search = eventTable;
+        for (i = 0; i < maxEventIndex; i++)
         {
             // check for match
             if (search[0] == buffer[2] && search[1] == buffer[3])
@@ -85,9 +79,9 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint
         }
 
         // if we didn't couldn't identify the packet, stop here
-        if (i == BLE_IDX_EVT_MAX) return -2;
+        if (i == maxEventIndex) return -2;
     }
-    
+
     Serial.print("PACKET: [ ");
     for (i = 0; i < length; i++)
     {
@@ -112,22 +106,22 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     
     // determine correct look-up table and search range, assume commands
     // (table 0 is commands, table 1 is responses, table 2 is events)
-    const uint8_t *search = SilabsBGAPIProtocol::bleProtocolCommandTable;
-    uint16_t max = BLE_IDX_CMD_MAX;
+    const uint8_t *search = commandTable;
+    uint16_t max = maxCommandIndex;
     uint8_t table = 0;
-    if (index > BLE_IDX_RSP_MAX)
+    if (index > maxResponseIndex)
     {
         // switch to event table
-        search = SilabsBGAPIProtocol::bleProtocolEventTable;
-        index -= (BLE_IDX_RSP_MAX + 1);
-        max = BLE_IDX_EVT_MAX - (BLE_IDX_RSP_MAX + 1);
+        search = eventTable;
+        index -= (maxResponseIndex + 1);
+        max = maxEventIndex - (maxResponseIndex + 1);
         table = 2;
     }
-    else if (index > BLE_IDX_CMD_MAX)
+    else if (index > maxCommandIndex)
     {
         // switch to response table (same as command but with index offsets)
-        index -= (BLE_IDX_CMD_MAX + 1);
-        max = BLE_IDX_RSP_MAX - (BLE_IDX_CMD_MAX + 1);
+        index -= (maxCommandIndex + 1);
+        max = maxResponseIndex - (maxCommandIndex + 1);
         table = 1;
     }
     
@@ -158,74 +152,32 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
 uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *packetDef)
 {
     if (!packetDef) return 0;
-    if (index < BLE_IDX_CMD_MAX || index > BLE_IDX_RSP_MAX)
+    if (index < maxCommandIndex || index > maxResponseIndex)
     {
-        return packetDef[2]; // outgoing command or incoming event arguments
+        // outgoing command or incoming event arguments
+        return packetDef[2];
     }
-    else
-    {
-        return packetDef[3]; // incoming response arguments
-    }
+
+    // incoming response arguments
+    return packetDef[3];
 }
 
 const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8_t *packetDef)
 {
     if (!packetDef) return 0;
-    if (index < BLE_IDX_CMD_MAX)
+    if (index < maxCommandIndex)
     {
         // command (found in command table, 1st half of each packet definition)
         return &packetDef[4];
     }
-    else if (index < BLE_IDX_RSP_MAX)
+    else if (index < maxResponseIndex)
     {
         // response (found in command table, 2nd half of each packet definition)
         return &packetDef[4 + packetDef[2]];
     }
-    else
-    {
-        // event (found in event table)
-        return &packetDef[3];
-    }
+    
+    // event (found in event table)
+    return &packetDef[3];
 }
-
-const uint8_t SilabsBGAPIProtocol::bleProtocolCommandTable[] =
-{
-    /* system_reset (ID=0/0) */
-        /* group_id */      0x00,
-        /* method_id */     0x00,
-        /* outarg_count */  0x01,
-        /* inarg_count */   0x80,
-        /* cmda[0] */       UINT8,
-        
-    /* system_hello (ID=0/1) */
-        /* group_id */      0x00,
-        /* method_id */     0x01,
-        /* outarg_count */  0x00,
-        /* inarg_count */   0x00,
-        
-    /* system_whitelist_append (ID=0/10) */
-        /* group_id */      0x00,
-        /* method_id */     0x0A,
-        /* outarg_count */  0x02,
-        /* inarg_count */   0x01,
-        /* cmda[0] */       MACADDR,
-        /* cmda[1] */       UINT8,
-        /* rspa[0] */       UINT16,
-};
-
-const uint8_t SilabsBGAPIProtocol::bleProtocolEventTable[] =
-{
-    /* system_boot (ID=0/0) */
-        /* group_id */      0x00,
-        /* method_id */     0x00,
-        /* inarg_count */   0x07,
-        /* evta[0] */       UINT16, /* uint16 major */
-        /* evta[1] */       UINT16, /* uint16 minor */
-        /* evta[2] */       UINT16, /* uint16 patch */
-        /* evta[3] */       UINT16, /* uint16 build */
-        /* evta[4] */       UINT16, /* uint16 ll_version */
-        /* evta[5] */       UINT8,  /* uint8 protocol_version */
-        /* evta[6] */       UINT8,  /* uint8 hw */
-};
 
 } // namespace Perilib
