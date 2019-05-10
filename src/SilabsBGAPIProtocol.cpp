@@ -180,4 +180,10 @@ const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8
     return &packetDef[3];
 }
 
+uint16_t SilabsBGAPIProtocol::getPayloadOffset(uint16_t index, const uint8_t *packetDef)
+{
+    // payload is always 4 bytes into the complete packet buffer
+    return 4;
+}
+
 } // namespace Perilib

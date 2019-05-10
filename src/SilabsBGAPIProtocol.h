@@ -31,6 +31,7 @@ public:
     virtual int8_t getPacketDefinition(uint16_t index, const uint8_t **packetDef);
     virtual uint8_t getArgumentCount(uint16_t index, const uint8_t *packetDef);
     virtual const uint8_t *getFirstArgument(uint16_t index, const uint8_t *packetDef);
+    virtual uint16_t getPayloadOffset(uint16_t index, const uint8_t *packetDef);
 
 protected:
     const uint8_t *commandTable;
