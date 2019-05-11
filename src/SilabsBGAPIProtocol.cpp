@@ -22,7 +22,7 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
     return ParseStatus::IN_PROGRESS;
 }
 
-int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
+int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
     // ensure packet and buffer pointers are valid
     if (!packet || !buffer) return -1;
