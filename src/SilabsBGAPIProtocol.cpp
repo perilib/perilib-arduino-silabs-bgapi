@@ -25,7 +25,7 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
 int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
     // ensure packet and buffer pointers are valid
-    if (!packet || !buffer) return -1;
+    if (!packet || !buffer) return Result::NULL_POINTER;
     
     // assign packet buffer (direct pointer, no copy)
     packet->buffer = buffer;
@@ -57,7 +57,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
         }
         
         // if we didn't couldn't identify the packet, stop here
-        if (i == maxCommandIndex) return -2;
+        if (i == maxCommandIndex) return Result::UNKNOWN_PACKET;
     }
     else
     {
@@ -79,7 +79,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
         }
 
         // if we didn't couldn't identify the packet, stop here
-        if (i == maxEventIndex) return -2;
+        if (i == maxEventIndex) return Result::UNKNOWN_PACKET;
     }
 
     Serial.print("PACKET: [ ");
@@ -90,13 +90,13 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
         Serial.write(' ');
     }
     Serial.println("]");
-    return 0;
+    return Result::OK;
 }
 
 int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **packetDef)
 {
     // ensure destination pointer is valid
-    if (!packetDef) return -1;
+    if (!packetDef) return Result::NULL_POINTER;
     
     // determine correct look-up table and search range, assume commands
     // (table 0 is commands, table 1 is responses, table 2 is events)
@@ -120,7 +120,7 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     }
     
     // abort if requested packet is out of range
-    if (index >= max) return -2;
+    if (index >= max) return Result::INVALID_INDEX;
     
     // jump through [index] definitions to obtain requested entry
     uint16_t i;
@@ -140,7 +140,7 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     
     // assign definition pointer and return success
     *packetDef = search;
-    return 0;
+    return Result::OK;
 }
 
 uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *packetDef)
