@@ -53,7 +53,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
             }
             
             // jump to next command definition
-            search += search[2] + search[3] + 4;
+            search += search[2] + (search[3] & 0x7F) + 4;
         }
         
         // if we didn't couldn't identify the packet, stop here
