@@ -4,6 +4,7 @@
 #include <Perilib.h>
 
 #include "SilabsBGAPIProtocol.h"
+#include "SilabsBGAPIPacket.h"
 
 namespace Perilib
 {
@@ -14,12 +15,14 @@ public:
     SilabsBGAPIDevice(
         ::Stream *arduinoUart,
         SilabsBGAPIProtocol *protocol,
+        SilabsBGAPIPacket *lastRxPacket,
+        SilabsBGAPIPacket *lastTxPacket,
         uint8_t *rxBuffer,
         uint16_t rxBufferSize,
         uint8_t *txBuffer,
         uint16_t txBufferSize)
             : StreamDevice(&stream),
-              parserGenerator(protocol, rxBuffer, rxBufferSize, txBuffer, txBufferSize),
+              parserGenerator(protocol, lastRxPacket, lastTxPacket, rxBuffer, rxBufferSize, txBuffer, txBufferSize),
               stream(arduinoUart, &parserGenerator, this) { }
     
 protected:

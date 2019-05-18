@@ -13,11 +13,19 @@ class SilabsBGAPIDeviceBLE1XX : public SilabsBGAPIDevice
 {
 public:
     SilabsBGAPIDeviceBLE1XX(::Stream *arduinoUart)
-            : SilabsBGAPIDevice(arduinoUart, &protocol, rxBuffer, sizeof(rxBuffer), txBuffer, sizeof(txBuffer)) { }
+            : SilabsBGAPIDevice(
+                arduinoUart,
+                &protocol,
+                &lastRxPacket,
+                &lastTxPacket,
+                rxBuffer, sizeof(rxBuffer),
+                txBuffer, sizeof(txBuffer)) { }
     
 protected:
     uint8_t rxBuffer[64];
     uint8_t txBuffer[64];
+    SilabsBGAPIPacket lastRxPacket;
+    SilabsBGAPIPacket lastTxPacket;
     SilabsBGAPIProtocolBLE1XX protocol;
 };
 
