@@ -34,8 +34,6 @@ public:
     SilabsBGAPIPacket()
     {
         PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacket::SilabsBGAPIPacket()");
-        header = (header_t *)&buffer[0];
-        payload = (payload_t *)&buffer[4];
     }
 
     inline uint8_t getMessageType() { return header ? (header->type >> 7) : 0; }
