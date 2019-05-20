@@ -29,6 +29,11 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     
     // assign packet buffer (direct pointer, no copy)
     packet->buffer = buffer;
+    packet->bufferLength = length;
+    
+    // assign special metadata
+    ((SilabsBGAPIPacket *)packet)->messageType = (buffer[0] >> 7);
+    ((SilabsBGAPIPacket *)packet)->technologyType = (buffer[0] >> 3) & 0xF;
     
     // assign header and payload pointers
     ((SilabsBGAPIPacket *)packet)->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
@@ -37,7 +42,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     // identify packet
     uint16_t i;
     const uint8_t *search;
-    if ((buffer[0] >> 7) == 0)
+    if (((SilabsBGAPIPacket *)packet)->messageType == 0)
     {
         // messageType == 0, command (TX) or response (RX)
         search = commandTable;

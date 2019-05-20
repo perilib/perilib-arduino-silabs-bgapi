@@ -36,11 +36,11 @@ public:
         PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacket::SilabsBGAPIPacket()");
     }
 
-    inline uint8_t getMessageType() { return header ? (header->type >> 7) : 0; }
-    inline uint8_t getTechnologyType() { return header ? (header->type >> 3) & 0x7 : 0; }
-    inline uint16_t getPayloadLength() { return header ? (header->length + ((uint16_t)(header->type & 0x07) << 8)) : 0; }
-
     virtual int8_t prepareBufferAfterBuilding();
+    
+    uint8_t messageType;
+    uint8_t technologyType;
+    uint8_t payloadLength;
     
     uint16_t index;
     const uint8_t *definition;
