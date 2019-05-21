@@ -34,6 +34,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     // assign special metadata
     ((SilabsBGAPIPacket *)packet)->messageType = (buffer[0] >> 7);
     ((SilabsBGAPIPacket *)packet)->technologyType = (buffer[0] >> 3) & 0xF;
+    ((SilabsBGAPIPacket *)packet)->payloadLength = ((buffer[0] & 0x7) << 8) | buffer[1];
     
     // assign header and payload pointers
     ((SilabsBGAPIPacket *)packet)->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
