@@ -32,7 +32,6 @@ public:
     virtual const uint8_t *getFirstArgument(uint16_t index, const uint8_t *packetDef);
     virtual uint16_t getPayloadOffset(uint16_t index, const uint8_t *packetDef);
 
-protected:
     const uint8_t *commandTable;
     const uint8_t *eventTable;
     const uint16_t maxCommandIndex;
