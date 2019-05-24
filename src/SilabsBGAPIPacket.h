@@ -42,8 +42,6 @@ public:
     uint8_t technologyType;
     uint8_t payloadLength;
     
-    uint16_t index;
-    const uint8_t *definition;
     header_t *header;
     payload_t *payload;
 

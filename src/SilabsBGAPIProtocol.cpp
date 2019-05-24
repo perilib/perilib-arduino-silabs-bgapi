@@ -53,8 +53,8 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
             if (search[0] == buffer[2] && search[1] == buffer[3])
             {
                 // group/method match, so assign index and stop searching
-                ((SilabsBGAPIPacket *)packet)->index = i;
-                ((SilabsBGAPIPacket *)packet)->definition = search;
+                packet->index = i;
+                packet->definition = search;
                 break;
             }
             
@@ -75,8 +75,8 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
             if (search[0] == buffer[2] && search[1] == buffer[3])
             {
                 // group/method match, so assign index and stop searching
-                ((SilabsBGAPIPacket *)packet)->index = i;
-                ((SilabsBGAPIPacket *)packet)->definition = search;
+                packet->index = i;
+                packet->definition = search;
                 break;
             }
             
