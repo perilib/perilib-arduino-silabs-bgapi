@@ -19,7 +19,11 @@ public:
                 &lastRxPacket,
                 &lastTxPacket,
                 rxBuffer, sizeof(rxBuffer),
-                txBuffer, sizeof(txBuffer)) { }
+                txBuffer, sizeof(txBuffer))
+       {
+           lastRxPacket->technologyType = 0;
+           lastTxPacket->technologyType = 0;
+       }
     
 protected:
     uint8_t rxBuffer[64];
