@@ -1,20 +1,20 @@
-#ifndef __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__
-#define __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__
+#ifndef __PERILIB_SILABSBGAPIDEVICEWGM110_H__
+#define __PERILIB_SILABSBGAPIDEVICEWGM110_H__
 
 #include <Perilib.h>
 
 #include "SilabsBGAPIDevice.h"
-#include "SilabsBGAPIProtocolBLE1XX.h"
+#include "SilabsBGAPIProtocolWGM110.h"
 
-#define SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE 64
+#define SILABS_BGAPI_WGM121_MAX_PACKET_SIZE 272
 
 namespace Perilib
 {
 
-class SilabsBGAPIDeviceBLE1XX : public SilabsBGAPIDevice
+class SilabsBGAPIDeviceWGM110 : public SilabsBGAPIDevice
 {
 public:
-    SilabsBGAPIDeviceBLE1XX(::Stream *arduinoUart)
+    SilabsBGAPIDeviceWGM110(::Stream *arduinoUart)
             : SilabsBGAPIDevice(
                 arduinoUart,
                 &protocol,
@@ -28,13 +28,13 @@ public:
        }
     
 protected:
-    uint8_t rxBuffer[SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE];
-    uint8_t txBuffer[SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE];
+    uint8_t rxBuffer[2];
+    uint8_t txBuffer[64];
     SilabsBGAPIPacket lastRxPacket;
     SilabsBGAPIPacket lastTxPacket;
-    SilabsBGAPIProtocolBLE1XX protocol;
+    SilabsBGAPIProtocolWGM110 protocol;
 };
 
 } // namespace Perilib
 
-#endif /* __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__ */
+#endif /* __PERILIB_SILABSBGAPIDEVICEWGM110_H__ */

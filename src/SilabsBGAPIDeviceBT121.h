@@ -1,20 +1,20 @@
-#ifndef __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__
-#define __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__
+#ifndef __PERILIB_SILABSBGAPIDEVICEBT121_H__
+#define __PERILIB_SILABSBGAPIDEVICEBT121_H__
 
 #include <Perilib.h>
 
 #include "SilabsBGAPIDevice.h"
-#include "SilabsBGAPIProtocolBLE1XX.h"
+#include "SilabsBGAPIProtocolBT121.h"
 
-#define SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE 64
+#define SILABS_BGAPI_BT121_MAX_PACKET_SIZE 272
 
 namespace Perilib
 {
 
-class SilabsBGAPIDeviceBLE1XX : public SilabsBGAPIDevice
+class SilabsBGAPIDeviceBT121 : public SilabsBGAPIDevice
 {
 public:
-    SilabsBGAPIDeviceBLE1XX(::Stream *arduinoUart)
+    SilabsBGAPIDeviceBT121(::Stream *arduinoUart)
             : SilabsBGAPIDevice(
                 arduinoUart,
                 &protocol,
@@ -28,13 +28,13 @@ public:
        }
     
 protected:
-    uint8_t rxBuffer[SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE];
-    uint8_t txBuffer[SILABS_BGAPI_BLE1XX_MAX_PACKET_SIZE];
+    uint8_t rxBuffer[SILABS_BGAPI_BT121_MAX_PACKET_SIZE];
+    uint8_t txBuffer[SILABS_BGAPI_BT121_MAX_PACKET_SIZE];
     SilabsBGAPIPacket lastRxPacket;
     SilabsBGAPIPacket lastTxPacket;
-    SilabsBGAPIProtocolBLE1XX protocol;
+    SilabsBGAPIProtocolBT121 protocol;
 };
 
 } // namespace Perilib
 
-#endif /* __PERILIB_SILABSBGAPIDEVICEBLE1XX_H__ */
+#endif /* __PERILIB_SILABSBGAPIDEVICEBT121_H__ */
