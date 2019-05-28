@@ -1,5 +1,5 @@
-#ifndef __PERILIB_SILABSBGAPIPROTOCOLDUMOBT121_H__
-#define __PERILIB_SILABSBGAPIPROTOCOLDUMOBT121_H__
+#ifndef __PERILIB_SILABSBGAPIPROTOCOLWGM110_H__
+#define __PERILIB_SILABSBGAPIPROTOCOLWGM110_H__
 
 #include <Perilib.h>
 
@@ -8,7 +8,7 @@
 namespace Perilib
 {
     
-class SilabsBGAPIProtocolDumoBT121: public SilabsBGAPIProtocol
+class SilabsBGAPIProtocolWGM110: public SilabsBGAPIProtocol
 {
 public:
     // {{ START perilib_protocol_cpp_index_enum_list }}
@@ -39,4 +39,4 @@ private:
 
 } // namespace Perilib
 
-#endif /* __PERILIB_SILABSBGAPIPROTOCOLDUMOBT121_H__ */
+#endif /* __PERILIB_SILABSBGAPIPROTOCOLWGM110_H__ */

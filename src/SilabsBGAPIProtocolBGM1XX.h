@@ -1,5 +1,5 @@
-#ifndef __PERILIB_SILABSBGAPIPROTOCOLWIFIWF121_H__
-#define __PERILIB_SILABSBGAPIPROTOCOLWIFIWF121_H__
+#ifndef __PERILIB_SILABSBGAPIPROTOCOLBGM1XX_H__
+#define __PERILIB_SILABSBGAPIPROTOCOLBGM1XX_H__
 
 #include <Perilib.h>
 
@@ -8,7 +8,7 @@
 namespace Perilib
 {
     
-class SilabsBGAPIProtocolWifiWF121: public SilabsBGAPIProtocol
+class SilabsBGAPIProtocolBGM1XX : public SilabsBGAPIProtocol
 {
 public:
     // {{ START perilib_protocol_cpp_index_enum_list }}
@@ -39,4 +39,4 @@ private:
 
 } // namespace Perilib
 
-#endif /* __PERILIB_SILABSBGAPIPROTOCOLWIFIWF121_H__ */
+#endif /* __PERILIB_SILABSBGAPIPROTOCOLBGM1XX_H__ */
