@@ -23,13 +23,13 @@ public:
                 rxBuffer, sizeof(rxBuffer),
                 txBuffer, sizeof(txBuffer))
        {
-           lastRxPacket->technologyType = 0;
-           lastTxPacket->technologyType = 0;
+           lastRxPacket->technologyType = 1;
+           lastTxPacket->technologyType = 1;
        }
     
 protected:
-    uint8_t rxBuffer[2];
-    uint8_t txBuffer[64];
+    uint8_t rxBuffer[SILABS_BGAPI_WGM121_MAX_PACKET_SIZE];
+    uint8_t txBuffer[SILABS_BGAPI_WGM121_MAX_PACKET_SIZE];
     SilabsBGAPIPacket lastRxPacket;
     SilabsBGAPIPacket lastTxPacket;
     SilabsBGAPIProtocolWGM110 protocol;
