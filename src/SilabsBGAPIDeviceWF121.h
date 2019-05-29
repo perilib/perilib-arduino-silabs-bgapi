@@ -23,8 +23,8 @@ public:
                 rxBuffer, sizeof(rxBuffer),
                 txBuffer, sizeof(txBuffer))
        {
-           lastRxPacket->technologyType = 1;
-           lastTxPacket->technologyType = 1;
+           lastRxPacket.technologyType = 1;
+           lastTxPacket.technologyType = 1;
        }
     
 protected:
