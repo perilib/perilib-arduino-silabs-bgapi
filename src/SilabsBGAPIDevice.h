@@ -25,7 +25,6 @@ public:
               parserGenerator(protocol, lastRxPacket, lastTxPacket, rxBuffer, rxBufferSize, txBuffer, txBufferSize),
               stream(arduinoUart, &parserGenerator, this) { }
     
-protected:
     StreamParserGenerator parserGenerator;
     UartStream stream;
 };
