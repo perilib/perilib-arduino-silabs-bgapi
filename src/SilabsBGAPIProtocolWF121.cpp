@@ -5,6 +5,7 @@ namespace Perilib
 
 const uint8_t SilabsBGAPIProtocolWF121::commandTable[] =
 {
+    // {{ START perilib_protocol_cpp_packet_struct_set commands }}
     /* system_reset (ID=0/0) */
         /* group_id */      0x00,
         /* method_id */     0x00,
@@ -26,10 +27,12 @@ const uint8_t SilabsBGAPIProtocolWF121::commandTable[] =
         /* cmda[0] */       MACADDR,
         /* cmda[1] */       UINT8,
         /* rspa[0] */       UINT16,
+    // {{ END perilib_protocol_cpp_packet_struct_set commands }}
 };
 
 const uint8_t SilabsBGAPIProtocolWF121::eventTable[] =
 {
+    // {{ START perilib_protocol_cpp_packet_struct_set events }}
     /* system_boot (ID=0/0) */
         /* group_id */      0x00,
         /* method_id */     0x00,
@@ -41,6 +44,7 @@ const uint8_t SilabsBGAPIProtocolWF121::eventTable[] =
         /* evta[4] */       UINT16, /* uint16 ll_version */
         /* evta[5] */       UINT8,  /* uint8 protocol_version */
         /* evta[6] */       UINT8,  /* uint8 hw */
+    // {{ END perilib_protocol_cpp_packet_struct_set events }}
 };
 
 } // namespace Perilib
