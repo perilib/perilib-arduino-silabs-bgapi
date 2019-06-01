@@ -6,7 +6,8 @@
 #include "SilabsBGAPIDevice.h"
 #include "SilabsBGAPIProtocolWF121.h"
 
-#define SILABS_BGAPI_WF121_MAX_PACKET_SIZE 272
+#define SILABS_BGAPI_WF121_MAX_RX_PACKET_SIZE 272
+#define SILABS_BGAPI_WF121_MAX_TX_PACKET_SIZE 272
 
 namespace Perilib
 {
@@ -28,8 +29,8 @@ public:
        }
     
 protected:
-    uint8_t rxBuffer[SILABS_BGAPI_WF121_MAX_PACKET_SIZE];
-    uint8_t txBuffer[SILABS_BGAPI_WF121_MAX_PACKET_SIZE];
+    uint8_t rxBuffer[SILABS_BGAPI_WF121_MAX_RX_PACKET_SIZE];
+    uint8_t txBuffer[SILABS_BGAPI_WF121_MAX_TX_PACKET_SIZE];
     SilabsBGAPIPacket lastRxPacket;
     SilabsBGAPIPacket lastTxPacket;
     SilabsBGAPIProtocolWF121 protocol;

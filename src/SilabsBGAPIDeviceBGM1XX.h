@@ -6,7 +6,8 @@
 #include "SilabsBGAPIDevice.h"
 #include "SilabsBGAPIProtocolBGM1XX.h"
 
-#define SILABS_BGAPI_BGM1XX_MAX_PACKET_SIZE 64
+#define SILABS_BGAPI_BGM1XX_MAX_RX_PACKET_SIZE 64
+#define SILABS_BGAPI_BGM1XX_MAX_TX_PACKET_SIZE 64
 
 namespace Perilib
 {
@@ -28,8 +29,8 @@ public:
        }
     
 protected:
-    uint8_t rxBuffer[SILABS_BGAPI_BGM1XX_MAX_PACKET_SIZE];
-    uint8_t txBuffer[SILABS_BGAPI_BGM1XX_MAX_PACKET_SIZE];
+    uint8_t rxBuffer[SILABS_BGAPI_BGM1XX_MAX_RX_PACKET_SIZE];
+    uint8_t txBuffer[SILABS_BGAPI_BGM1XX_MAX_TX_PACKET_SIZE];
     SilabsBGAPIPacket lastRxPacket;
     SilabsBGAPIPacket lastTxPacket;
     SilabsBGAPIProtocolBGM1XX protocol;
