@@ -37,8 +37,6 @@ int8_t SilabsBGAPIPacket::prepareBufferAfterBuilding()
     
     // update metadata
     SilabsBGAPIProtocol *bgapiProtocol = (SilabsBGAPIProtocol *)parserGenerator->protocol;
-    Serial.print("INDEX="); Serial.println(index);
-    Serial.print("MAXRSP="); Serial.println(bgapiProtocol->maxResponseIndex);
     if (index > bgapiProtocol->maxResponseIndex)
     {
         // packet is event, not command/response
