@@ -55,61 +55,52 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     packet->bufferLength = length;
     
     // assign special metadata
-    ((SilabsBGAPIPacket *)packet)->messageType = (buffer[0] >> 7);
-    ((SilabsBGAPIPacket *)packet)->technologyType = (buffer[0] >> 3) & 0xF;
-    ((SilabsBGAPIPacket *)packet)->payloadLength = ((buffer[0] & 0x7) << 8) | buffer[1];
+    SilabsBGAPIPacket *bgapiPacket = (SilabsBGAPIPacket *)packet;
+    bgapiPacket->messageType = (buffer[0] >> 7);
+    bgapiPacket->technologyType = (buffer[0] >> 3) & 0xF;
+    bgapiPacket->payloadLength = ((buffer[0] & 0x7) << 8) | buffer[1];
     
     // assign header and payload pointers
-    ((SilabsBGAPIPacket *)packet)->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
-    ((SilabsBGAPIPacket *)packet)->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
+    bgapiPacket->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
+    bgapiPacket->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
     
-    // identify packet
+    // identify packet, assume command (TX) or response (RX)
     uint16_t i;
-    const uint8_t *search;
-    if (((SilabsBGAPIPacket *)packet)->messageType == 0)
+    const uint8_t *search = commandTable;
+    uint16_t maxIndex = maxCommandIndex;
+    if (bgapiPacket->messageType == 1)
     {
-        // messageType == 0, command (TX) or response (RX)
-        search = commandTable;
-        for (i = 0; i < maxCommandIndex; i++)
+        // actually it's an event packet (RX)
+        search = eventTable;
+        maxIndex = maxEventIndex;
+    }
+    
+    // search through table
+    for (i = 0; i < maxIndex; i++)
+    {
+        // check for match
+        if (search[0] == buffer[2] && search[1] == buffer[3])
         {
-            // check for match
-            if (search[0] == buffer[2] && search[1] == buffer[3])
-            {
-                // group/method match, so assign index and stop searching
-                packet->index = i;
-                packet->definition = search;
-                break;
-            }
-            
+            // group/method match, so assign index and stop searching
+            packet->index = i;
+            packet->definition = search;
+            break;
+        }
+
+        if (bgapiPacket->messageType == 0)
+        {
             // jump to next command definition
             search += search[2] + (search[3] & 0x7F) + 4;
         }
-        
-        // if we didn't couldn't identify the packet, stop here
-        if (i == maxCommandIndex) return Result::UNKNOWN_PACKET;
-    }
-    else
-    {
-        // messageType == 1, event (RX)
-        search = eventTable;
-        for (i = 0; i < maxEventIndex; i++)
+        else
         {
-            // check for match
-            if (search[0] == buffer[2] && search[1] == buffer[3])
-            {
-                // group/method match, so assign index and stop searching
-                packet->index = i;
-                packet->definition = search;
-                break;
-            }
-            
             // jump to next event definition
             search += search[2] + 3;
         }
-
-        // if we didn't couldn't identify the packet, stop here
-        if (i == maxEventIndex) return Result::UNKNOWN_PACKET;
     }
+    
+    // if we didn't couldn't identify the packet, stop here
+    if (i == maxIndex) return Result::UNKNOWN_PACKET;
 
     Serial.print("PACKET: [ ");
     for (i = 0; i < length; i++)
