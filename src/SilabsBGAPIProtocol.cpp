@@ -64,45 +64,12 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     bgapiPacket->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
     bgapiPacket->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
     
-    // identify packet, assume command (TX) or response (RX)
-    uint16_t i;
-    const uint8_t *search = commandTable;
-    uint16_t maxIndex = maxCommandIndex;
-    if (bgapiPacket->messageType == 1)
-    {
-        // actually it's an event packet (RX)
-        search = eventTable;
-        maxIndex = maxEventIndex;
-    }
-    
-    // search through table
-    for (i = 0; i < maxIndex; i++)
-    {
-        // check for match
-        if (search[0] == buffer[2] && search[1] == buffer[3])
-        {
-            // group/method match, so assign index and stop searching
-            packet->index = i;
-            packet->definition = search;
-            break;
-        }
-
-        if (bgapiPacket->messageType == 0)
-        {
-            // jump to next command definition
-            search += search[2] + (search[3] & 0x7F) + 4;
-        }
-        else
-        {
-            // jump to next event definition
-            search += search[2] + 3;
-        }
-    }
-    
-    // if we didn't couldn't identify the packet, stop here
-    if (i == maxIndex) return Result::UNKNOWN_PACKET;
+    // get packet definition
+    int8_t result;
+    if ((result = getPacketDefinitionFromBuffer(buffer, length, &packet->index, &packet->definition)) != 0) return result;
 
     Serial.print("PACKET: [ ");
+    uint16_t i;
     for (i = 0; i < length; i++)
     {
         if (buffer[i] < 16) Serial.write('0');
@@ -113,7 +80,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     return Result::OK;
 }
 
-int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **packetDef)
+int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const uint8_t **packetDef)
 {
     // ensure destination pointer is valid
     if (!packetDef) return Result::NULL_POINTER;
@@ -159,6 +126,53 @@ int8_t SilabsBGAPIProtocol::getPacketDefinition(uint16_t index, const uint8_t **
     }
     
     // assign definition pointer and return success
+    *packetDef = search;
+    return Result::OK;
+}
+
+int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer, uint16_t length, uint16_t *index, const uint8_t **packetDef)
+{
+    // ensure destination pointer is valid
+    if (!buffer || !index || !packetDef) return Result::NULL_POINTER;
+
+    // identify packet, assume command (TX) or response (RX)
+    uint16_t i;
+    const uint8_t *search = commandTable;
+    uint16_t maxIndex = maxCommandIndex;
+    if ((buffer[0] & 0x80) != 0)
+    {
+        // actually it's an event packet (RX)
+        search = eventTable;
+        maxIndex = maxEventIndex;
+    }
+    
+    // search through table
+    for (i = 0; i < maxIndex; i++)
+    {
+        // check for match
+        if (search[0] == buffer[2] && search[1] == buffer[3])
+        {
+            // group/method match, so stop searching
+            break;
+        }
+
+        if ((buffer[0] & 0x80) == 0)
+        {
+            // jump to next command definition
+            search += search[2] + (search[3] & 0x7F) + 4;
+        }
+        else
+        {
+            // jump to next event definition
+            search += search[2] + 3;
+        }
+    }
+    
+    // if we didn't couldn't identify the packet, stop here
+    if (i == maxIndex) return Result::UNKNOWN_PACKET;
+
+    // assign index/definition pointers and return success
+    *index = i;
     *packetDef = search;
     return Result::OK;
 }
