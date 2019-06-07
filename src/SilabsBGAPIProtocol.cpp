@@ -29,6 +29,10 @@ namespace Perilib
 
 int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::testPacketCompletep([...], ");
+    PERILIB_DEBUG_PRINT(length);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     // make sure we have at least the header (4 bytes)
     if (length > 3)
     {
@@ -47,6 +51,10 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
 
 int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPacketFromBuffer(*{}, [...], ");
+    PERILIB_DEBUG_PRINT(length);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     // ensure packet and buffer pointers are valid
     if (!packet || !buffer) return Result::NULL_POINTER;
     
@@ -82,6 +90,10 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
 
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const uint8_t **packetDef)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPacketDefinitionFromIndex(");
+    PERILIB_DEBUG_PRINT(index);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     // ensure destination pointer is valid
     if (!packetDef) return Result::NULL_POINTER;
     
@@ -132,6 +144,8 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const u
 
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer, uint16_t length, uint16_t *index, const uint8_t **packetDef)
 {
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(...)");
+
     // ensure destination pointer is valid
     if (!buffer || !index || !packetDef) return Result::NULL_POINTER;
 
@@ -179,6 +193,10 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer,
 
 uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *packetDef)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getArgumentCount(");
+    PERILIB_DEBUG_PRINT(index);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     if (!packetDef) return 0;
     if (index < maxCommandIndex || index > maxResponseIndex)
     {
@@ -192,6 +210,10 @@ uint8_t SilabsBGAPIProtocol::getArgumentCount(uint16_t index, const uint8_t *pac
 
 const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8_t *packetDef)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getFirstArgument(");
+    PERILIB_DEBUG_PRINT(index);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     if (!packetDef) return 0;
     if (index < maxCommandIndex)
     {
@@ -210,6 +232,10 @@ const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8
 
 uint16_t SilabsBGAPIProtocol::getPayloadOffset(uint16_t index, const uint8_t *packetDef)
 {
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getFirstArgument(");
+    PERILIB_DEBUG_PRINT(index);
+    PERILIB_DEBUG_PRINTLN(", ...)");
+
     // payload is always 4 bytes into the complete packet buffer
     return 4;
 }
