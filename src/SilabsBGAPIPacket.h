@@ -54,7 +54,8 @@ public:
         uint8_t methodId;
     } __attribute__((packed)) header_t;
     
-    SilabsBGAPIPacket()
+    SilabsBGAPIPacket(uint8_t *buffer, uint16_t bufferSize) :
+            StreamPacket(buffer, bufferSize)
     {
         PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacket::SilabsBGAPIPacket()");
     }

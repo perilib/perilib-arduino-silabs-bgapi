@@ -43,9 +43,9 @@ public:
                 arduinoUart,
                 &protocol,
                 &lastRxPacket,
-                &lastTxPacket,
-                rxBuffer, sizeof(rxBuffer),
-                txBuffer, sizeof(txBuffer))
+                &lastTxPacket),
+              lastRxPacket(rxBuffer, sizeof(rxBuffer)),
+              lastTxPacket(txBuffer, sizeof(txBuffer))
        {
            lastRxPacket.technologyType = 4;
            lastTxPacket.technologyType = 4;

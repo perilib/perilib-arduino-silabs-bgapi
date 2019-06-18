@@ -39,13 +39,9 @@ public:
         ::Stream *arduinoUart,
         SilabsBGAPIProtocol *protocol,
         SilabsBGAPIPacket *lastRxPacket,
-        SilabsBGAPIPacket *lastTxPacket,
-        uint8_t *rxBuffer,
-        uint16_t rxBufferSize,
-        uint8_t *txBuffer,
-        uint16_t txBufferSize)
+        SilabsBGAPIPacket *lastTxPacket)
             : StreamDevice(&stream),
-              parserGenerator(protocol, lastRxPacket, rxBuffer, rxBufferSize, lastTxPacket, txBuffer, txBufferSize),
+              parserGenerator(protocol, lastRxPacket, lastTxPacket),
               stream(arduinoUart, &parserGenerator, this) { }
     
     StreamParserGenerator parserGenerator;
