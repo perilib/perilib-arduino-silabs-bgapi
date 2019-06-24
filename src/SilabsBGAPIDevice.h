@@ -42,7 +42,11 @@ public:
         SilabsBGAPIPacket *lastTxPacket)
             : StreamDevice(&stream),
               parserGenerator(protocol, lastRxPacket, lastTxPacket),
-              stream(arduinoUart, &parserGenerator, this) { }
+              stream(arduinoUart, &parserGenerator, this)
+        {
+            // set par/gen related stream object to self
+            this->stream = stream;
+        }
     
     StreamParserGenerator parserGenerator;
     UartStream stream;
