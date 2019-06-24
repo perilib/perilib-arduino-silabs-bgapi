@@ -48,10 +48,10 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   device.process();
-  if (millis() - t0 > 5000) {
+  
+  // send system_hello command (ping) once per second
+  if (millis() - t0 > 1000) {
     t0 = millis();
-
-    Serial.println(device.stream.parserGenerator->sendPacket(Perilib::SilabsBGAPIProtocolBLE1XX::BLE_EVT_SYSTEM_BOOT, 1, 4, 0, 138, 1, 1, 8));
-    //Serial.println(parserGenerator->sendPacket(Perilib::SilabsBGAPIProtocolBLE1XX::BLE_RSP_SYSTEM_WHITELIST_APPEND, 0x0204));
+    device.sendPacket(Perilib::SilabsBGAPIProtocolBLE1XX::BLE_CMD_SYSTEM_HELLO);
   }
 }
