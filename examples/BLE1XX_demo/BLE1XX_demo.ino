@@ -7,21 +7,34 @@ int8_t onRxPacket(Perilib::StreamPacket *packet)
   // create pointer cast to child class
   Perilib::SilabsBGAPIPacket *bgapiPacket = (Perilib::SilabsBGAPIPacket *)packet;
   
-  // dump raw packet data
-  Serial.print("RXP: [");
-  Serial.write(bgapiPacket->buffer, bgapiPacket->bufferLength);
+  // dump raw packet data in hexadecimal notation
+  Serial.print("RXP: [ ");
+  uint16_t i;
+  for (i = 0; i < bgapiPacket->bufferLength; i++)
+  {
+    if (bgapiPacket->buffer[i] < 16) Serial.write('0');
+    Serial.print(bgapiPacket->buffer[i], HEX);
+    Serial.write(' ');
+  }
   Serial.println("]");
   
+  // display formatted packet based on index
   switch (packet->index)
   {
+    case Perilib::SilabsBGAPIProtocolBLE1XX::BLE_RSP_SYSTEM_HELLO:
+      Serial.print("ble_evt_system_hello()\r\n");
+      break;
+      
     case Perilib::SilabsBGAPIProtocolBLE1XX::BLE_EVT_SYSTEM_BOOT:
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.major);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.minor);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.patch);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.build);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.ll_version);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.protocol_version);
-      Serial.println(bgapiPacket->payload->ble_evt_system_boot.hw);
+      Serial.print("ble_evt_system_boot(");
+      Serial.print("major=");               Serial.print(bgapiPacket->payload->ble_evt_system_boot.major);
+      Serial.print(", minor=");             Serial.print(bgapiPacket->payload->ble_evt_system_boot.minor);
+      Serial.print(", patch=");             Serial.print(bgapiPacket->payload->ble_evt_system_boot.patch);
+      Serial.print(", build=");             Serial.print(bgapiPacket->payload->ble_evt_system_boot.build);
+      Serial.print(", ll_version=");        Serial.print(bgapiPacket->payload->ble_evt_system_boot.ll_version);
+      Serial.print(", protocol_version=");  Serial.print(bgapiPacket->payload->ble_evt_system_boot.protocol_version);
+      Serial.print(", hw=");                Serial.print(bgapiPacket->payload->ble_evt_system_boot.hw);
+      Serial.print(")\r\n");
       break;
   }
   
