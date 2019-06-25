@@ -73,19 +73,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     bgapiPacket->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
     
     // get packet definition
-    int8_t result;
-    if ((result = getPacketDefinitionFromBuffer(buffer, length, &packet->index, &packet->definition)) != 0) return result;
-
-    Serial.print("PACKET: [ ");
-    uint16_t i;
-    for (i = 0; i < length; i++)
-    {
-        if (buffer[i] < 16) Serial.write('0');
-        Serial.print(buffer[i], HEX);
-        Serial.write(' ');
-    }
-    Serial.println("]");
-    return Result::OK;
+    return getPacketDefinitionFromBuffer(buffer, length, &packet->index, &packet->definition);
 }
 
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const uint8_t **packetDef)
