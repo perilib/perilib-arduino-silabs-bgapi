@@ -29,7 +29,7 @@ namespace Perilib
 
 int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
-    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::testPacketCompletep([...], ");
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::testPacketComplete([...], ");
     PERILIB_DEBUG_PRINT(length);
     PERILIB_DEBUG_PRINTLN(", ...)");
 
@@ -232,7 +232,7 @@ const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8
 
 uint16_t SilabsBGAPIProtocol::getPayloadOffset(uint16_t index, const uint8_t *packetDef)
 {
-    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getFirstArgument(");
+    PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPayloadOffset(");
     PERILIB_DEBUG_PRINT(index);
     PERILIB_DEBUG_PRINTLN(", ...)");
 
