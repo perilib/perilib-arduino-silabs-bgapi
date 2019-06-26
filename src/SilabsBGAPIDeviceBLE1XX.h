@@ -49,7 +49,12 @@ public:
        {
            lastRxPacket.technologyType = 0;
            lastTxPacket.technologyType = 0;
+           packetMode = false;
        }
+       
+    virtual int8_t sendPacket(uint16_t index, ...);
+       
+    bool packetMode;
     
 protected:
     uint8_t rxBuffer[SILABS_BGAPI_BLE1XX_MAX_RX_PACKET_SIZE];

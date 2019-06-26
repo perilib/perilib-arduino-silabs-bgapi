@@ -22,7 +22,7 @@ int8_t onRxPacket(Perilib::StreamPacket *packet)
   switch (packet->index)
   {
     case Perilib::SilabsBGAPIProtocolBLE1XX::BLE_RSP_SYSTEM_HELLO:
-      Serial.print("ble_evt_system_hello()\r\n");
+      Serial.print("ble_rsp_system_hello()\r\n");
       break;
       
     case Perilib::SilabsBGAPIProtocolBLE1XX::BLE_EVT_SYSTEM_BOOT:
@@ -45,7 +45,8 @@ int8_t onRxPacket(Perilib::StreamPacket *packet)
 uint32_t t0;
 void setup() {
   // assign callbacks
-  device.stream.parserGenerator->onRxPacket = onRxPacket;
+  device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
+  device.packetMode = true;
   
   // wait until host opens serial port
   while (!Serial);
