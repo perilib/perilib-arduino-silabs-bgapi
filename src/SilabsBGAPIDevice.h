@@ -45,7 +45,7 @@ public:
               stream(arduinoUart, &parserGenerator, this)
         {
             // set par/gen related stream object to self
-            this->stream = stream;
+            parserGenerator.streamPtr = (Stream *)&stream;
         }
     
     StreamParserGenerator parserGenerator;

@@ -36,7 +36,7 @@ int8_t SilabsBGAPIPacket::prepareBufferAfterBuilding()
     payload = (payload_t *)&buffer[4];
     
     // update metadata
-    SilabsBGAPIProtocol *bgapiProtocol = (SilabsBGAPIProtocol *)parserGenerator->protocol;
+    SilabsBGAPIProtocol *bgapiProtocol = (SilabsBGAPIProtocol *)parserGenerator->protocolPtr;
     if (index > bgapiProtocol->maxResponseIndex)
     {
         // packet is event, not command/response
