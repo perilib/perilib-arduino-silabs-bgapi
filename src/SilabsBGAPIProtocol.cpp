@@ -141,11 +141,13 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer,
     uint16_t i;
     const uint8_t *search = commandTable;
     uint16_t maxIndex = maxCommandIndex;
+    uint16_t indexOffset = 0;
     if ((buffer[0] & 0x80) != 0)
     {
         // actually it's an event packet (RX)
         search = eventTable;
         maxIndex = maxEventIndex;
+        indexOffset = maxResponseIndex + 1;
     }
     
     // search through table
@@ -174,7 +176,7 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer,
     if (i == maxIndex) return Result::UNKNOWN_PACKET;
 
     // assign index/definition pointers and return success
-    *index = i;
+    *index = i + indexOffset;
     *packetDef = search;
     return Result::OK;
 }
