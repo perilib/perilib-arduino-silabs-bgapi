@@ -1,5 +1,8 @@
 #include <Perilib_Silabs_BGAPI.h>
 
+#define BLE1XX_MODULE_BAUD_RATE 38400
+#define BLE1XX_MODULE_PACKET_MODE false
+
 Perilib::SilabsBGAPIDeviceBLE1XX device(&Serial1);
 
 int8_t onRxPacket(Perilib::StreamPacket *packet)
@@ -46,7 +49,9 @@ uint32_t t0;
 void setup() {
   // assign callbacks
   device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
-  device.packetMode = true;
+  
+  // uncomment the following 
+  device.packetMode = BLE1XX_MODULE_PACKET_MODE;
   
   // wait until host opens serial port
   while (!Serial);
@@ -55,7 +60,7 @@ void setup() {
   Serial.begin(9600);
   
   // initialize module serial interface for BGAPI communication
-  Serial1.begin(38400);
+  Serial1.begin(BLE1XX_MODULE_BAUD_RATE);
   t0 = millis();
 }
 
