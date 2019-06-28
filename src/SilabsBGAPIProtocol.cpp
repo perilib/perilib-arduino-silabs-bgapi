@@ -73,7 +73,7 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     bgapiPacket->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
     
     // get packet definition
-    return getPacketDefinitionFromBuffer(buffer, length, &packet->index, &packet->definition);
+    return getPacketDefinitionFromBuffer(buffer, length, isTx, &packet->index, &packet->definition);
 }
 
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const uint8_t **packetDef)
@@ -130,24 +130,30 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const u
     return Result::OK;
 }
 
-int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer, uint16_t length, uint16_t *index, const uint8_t **packetDef)
+int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer, uint16_t length, bool isTx, uint16_t *index, const uint8_t **packetDef)
 {
     PERILIB_DEBUG_PRINTLN("SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(...)");
 
     // ensure destination pointer is valid
     if (!buffer || !index || !packetDef) return Result::NULL_POINTER;
 
-    // identify packet, assume command (TX) or response (RX)
+    // identify packet, assume response (RX)
     uint16_t i;
     const uint8_t *search = commandTable;
-    uint16_t maxIndex = maxCommandIndex;
-    uint16_t indexOffset = 0;
+    uint16_t maxIndex = maxResponseIndex;
+    uint16_t indexOffset = maxCommandIndex + 1;
     if ((buffer[0] & 0x80) != 0)
     {
-        // actually it's an event packet (RX)
+        // buffer contains event packet (RX)
         search = eventTable;
         maxIndex = maxEventIndex;
         indexOffset = maxResponseIndex + 1;
+    }
+    else if (isTx)
+    {
+        // buffer contains command packet (TX), less common for buffer analysis
+        maxIndex = maxCommandIndex;
+        indexOffset = 0;
     }
     
     // search through table
