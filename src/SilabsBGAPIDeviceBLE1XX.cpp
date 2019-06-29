@@ -47,15 +47,29 @@ int8_t SilabsBGAPIDeviceBLE1XX::sendPacket(uint16_t index, ...)
         // send packet if stream exists and generation was successful
         if (result == Result::OK)
         {
+            if (wakePin != -1)
+            {
+                // assert module wake-up pin
+                digitalWrite(wakePin, wakeAssertedState ? HIGH : LOW);
+            }
+            
             if (packetMode)
             {
                 // prefix the transmission with a <length> byte
                 // so module DMA can allocate and process faster
                 streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength, 1);
             }
+            
+            // write packet contents to stream
             result = streamPtr->write(
                 streamPtr->parserGeneratorPtr->lastTxPacketPtr->buffer,
                 streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength);
+            
+            if (wakePin != -1)
+            {
+                // de-assert module wake-up pin
+                digitalWrite(wakePin, wakeAssertedState ? LOW : HIGH);
+            }
         }
     }
     

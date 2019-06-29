@@ -46,10 +46,17 @@ public:
         {
             // set par/gen related stream object to self
             parserGenerator.streamPtr = (Stream *)&stream;
+            
+            // set default wake-up pin behavior (disabled, active-high)
+            wakePin = -1;
+            wakeAssertedState = HIGH;
         }
     
     StreamParserGenerator parserGenerator;
     UartStream stream;
+    
+    int8_t wakePin;
+    uint8_t wakeAssertedState;
 };
 
 } // namespace Perilib
