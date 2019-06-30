@@ -1,7 +1,9 @@
 #include <Perilib_Silabs_BGAPI.h>
 
-#define BLE1XX_MODULE_UART_BAUD_RATE 38400
-#define BLE1XX_MODULE_USE_PACKET_MODE 1
+#define BLE1XX_MODULE_UART_BAUD_RATE        38400
+#define BLE1XX_MODULE_USE_PACKET_MODE       1
+#define BLE1XX_MODULE_WAKE_PIN              2
+#define BLE1XX_MODULE_WAKE_ASSERTED_STATE   HIGH
 
 Perilib::SilabsBGAPIDeviceBLE1XX device(&Serial1);
 
@@ -50,8 +52,13 @@ void setup() {
   // assign callbacks
   device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
   
-  // uncomment the following 
+  // uncomment the following to use BGAPI in "packet" mode
+  // (<length> prefix byte for outgoing transmissions)
   device.packetMode = BLE1XX_MODULE_USE_PACKET_MODE;
+
+  // configure wake-up pin control
+  device.wakePin = BLE1XX_MODULE_WAKE_PIN;
+  device.wakeAssertedState = BLE1XX_MODULE_WAKE_ASSERTED_STATE;
   
   // wait until host opens serial port
   while (!Serial);
