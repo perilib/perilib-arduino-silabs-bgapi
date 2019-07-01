@@ -41,6 +41,16 @@ int8_t onRxPacket(Perilib::StreamPacket *packet)
       Serial.print(", hw=");                Serial.print(bgapiPacket->payload->ble_evt_system_boot.hw);
       Serial.print(")\r\n");
       break;
+      
+    default:
+      Serial.print("Unhandled packet: index=");
+      Serial.print(packet->index);
+      Serial.print(", type=");
+      Serial.print(bgapiPacket->messageType);
+      Serial.print(", group=");
+      Serial.print(bgapiPacket->header->groupId);
+      Serial.print(", method=");
+      Serial.println(bgapiPacket->header->methodId);
   }
   
   // allow further processing (non-zero to prevent)
