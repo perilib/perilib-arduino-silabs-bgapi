@@ -10,7 +10,7 @@ Perilib::SilabsBGAPIDeviceBLE1XX device(&Serial1);
 int8_t onRxPacket(Perilib::StreamPacket *packet)
 {
   // create pointer cast to child class
-  Perilib::SilabsBGAPIPacket *bgapiPacket = (Perilib::SilabsBGAPIPacket *)packet;
+  Perilib::SilabsBGAPIPacketBLE1XX *bgapiPacket = (Perilib::SilabsBGAPIPacketBLE1XX *)packet;
   
   // dump raw packet data in hexadecimal notation
   Serial.print("RXP: [ ");

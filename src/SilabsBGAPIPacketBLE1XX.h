@@ -21,34 +21,42 @@
  * DEALINGS IN THE SOFTWARE.
  */
  
-#include "SilabsBGAPIProtocol.h"
-#include "SilabsBGAPIPacket.h"
+#ifndef __PERILIB_SILABSBGAPIPACKETBLE1XX_H__
+#define __PERILIB_SILABSBGAPIPACKETBLE1XX_H__
+
+#include <Perilib.h>
 
 namespace Perilib
 {
 
-int8_t SilabsBGAPIPacket::prepareBufferAfterBuilding()
+class SilabsBGAPIPacketBLE1XX : public SilabsBGAPIPacket
 {
-    PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacket::prepareBufferAfterBuilding()");
+public:
+    typedef struct {
+        uint16_t major;
+        uint16_t minor;
+        uint16_t patch;
+        uint16_t build;
+        uint16_t ll_version;
+        uint8_t protocol_version;
+        uint8_t hw;
+    } __attribute__((packed)) ble_evt_system_boot_t;
 
-    // make sure header pointer is correct
-    header = (header_t *)&buffer[0];
+    typedef union {
+        ble_evt_system_boot_t ble_evt_system_boot;
+    } payload_t;
     
-    // update metadata
-    SilabsBGAPIProtocol *bgapiProtocol = (SilabsBGAPIProtocol *)parserGenerator->protocolPtr;
-    if (index > bgapiProtocol->maxResponseIndex)
+    SilabsBGAPIPacketBLE1XX(uint8_t *buffer, uint16_t bufferSize) :
+            SilabsBGAPIPacket(buffer, bufferSize)
     {
-        // packet is event, not command/response
-        messageType = 1;
+        PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacketBLE1XX::SilabsBGAPIPacketBLE1XX()");
+        payload = (payload_t *)&buffer[4];
     }
-    payloadLength = bufferLength - 4;
 
-    // fill BGAPI packet header data
-    header->type = (messageType << 7) | (technologyType << 3) | (payloadLength >> 8);
-    header->length = (payloadLength & 0xFF);
-    header->groupId = definition[0];
-    header->methodId = definition[1];
-    return Result::OK;
-}
+    payload_t *payload;
+
+};
 
 } // namespace Perilib
+
+#endif /* __PERILIB_SILABSBGAPIPACKETBLE1XX_H__ */

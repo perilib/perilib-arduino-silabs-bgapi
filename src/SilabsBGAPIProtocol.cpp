@@ -68,9 +68,8 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     bgapiPacket->technologyType = (buffer[0] >> 3) & 0xF;
     bgapiPacket->payloadLength = ((buffer[0] & 0x7) << 8) | buffer[1];
     
-    // assign header and payload pointers
+    // assign header pointer
     bgapiPacket->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
-    bgapiPacket->payload = (SilabsBGAPIPacket::payload_t *)&packet->buffer[4];
     
     // get packet definition
     return getPacketDefinitionFromBuffer(buffer, length, isTx, &packet->index, &packet->definition);

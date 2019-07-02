@@ -52,6 +52,15 @@ public:
     // {{ END perilib_protocol_cpp_index_enum_list }}
     
     // {{ START perilib_protocol_cpp_packet_struct_set }}
+    typedef struct {
+        uint16_t major;
+        uint16_t minor;
+        uint16_t patch;
+        uint16_t build;
+        uint16_t ll_version;
+        uint8_t protocol_version;
+        uint8_t hw;
+    } __attribute__((packed)) ble_evt_system_boot_t;
     // {{ END perilib_protocol_cpp_packet_struct_set }}
 
     SilabsBGAPIProtocolBLE1XX()

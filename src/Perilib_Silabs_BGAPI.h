@@ -41,5 +41,6 @@
 #include "SilabsBGAPIProtocolWF121.h"
 #include "SilabsBGAPIProtocolWGM110.h"
 #include "SilabsBGAPIPacket.h"
+#include "SilabsBGAPIPacketBLE1XX.h"
 
 #endif /* __PERILIB_SILABS_BGAPI_H__ */

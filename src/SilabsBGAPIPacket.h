@@ -32,21 +32,7 @@ namespace Perilib
 class SilabsBGAPIPacket : public StreamPacket
 {
 public:
-    typedef struct {
-        uint16_t major;
-        uint16_t minor;
-        uint16_t patch;
-        uint16_t build;
-        uint16_t ll_version;
-        uint8_t protocol_version;
-        uint8_t hw;
-    } __attribute__((packed)) ble_evt_system_boot_t;
 
-    typedef union {
-        uint8_t buffer[];
-        ble_evt_system_boot_t ble_evt_system_boot;
-    } payload_t;
-    
     typedef struct {
         uint8_t type;
         uint8_t length;
@@ -58,6 +44,7 @@ public:
             StreamPacket(buffer, bufferSize)
     {
         PERILIB_DEBUG_PRINTLN("SilabsBGAPIPacket::SilabsBGAPIPacket()");
+        header = (header_t *)&buffer[0];
     }
 
     virtual int8_t prepareBufferAfterBuilding();
@@ -67,7 +54,6 @@ public:
     uint8_t payloadLength;
     
     header_t *header;
-    payload_t *payload;
 
 };
 
