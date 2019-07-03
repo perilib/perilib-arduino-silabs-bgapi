@@ -26,55 +26,36 @@
 namespace Perilib
 {
 
-int8_t SilabsBGAPIDeviceBLE1XX::sendPacket(uint16_t index, ...)
+int8_t SilabsBGAPIDeviceBLE1XX::onPreTransmission()
 {
-    PERILIB_DEBUG_PRINT("SilabsBGAPIDeviceBLE1XX::sendPacket(");
-    PERILIB_DEBUG_PRINT(index);
-    PERILIB_DEBUG_PRINTLN(", ...)");
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIDeviceBLE1XX::onPreTransmission()");
 
-    int8_t result = Result::OK;
-
-    if (streamPtr && streamPtr->parserGeneratorPtr)
+    if (wakePin != -1)
     {
-        // generate packet
-        va_list argv;
-        va_start(argv, index);
-        result = streamPtr->parserGeneratorPtr->generate(index, argv);
-        PERILIB_DEBUG_PRINT("generate() result is ");
-        PERILIB_DEBUG_PRINTLN(result);
-        va_end(argv);
-    
-        // send packet if stream exists and generation was successful
-        if (result == Result::OK)
-        {
-            if (wakePin != -1)
-            {
-                // assert module wake-up pin
-                digitalWrite(wakePin, wakeAssertedState ? HIGH : LOW);
-            }
-            
-            if (packetMode)
-            {
-                // prefix the transmission with a <length> byte
-                // so module DMA can allocate and process faster
-                streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength, 1);
-            }
-            
-            // write packet contents to stream
-            result = streamPtr->write(
-                streamPtr->parserGeneratorPtr->lastTxPacketPtr->buffer,
-                streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength);
-            
-            if (wakePin != -1)
-            {
-                // de-assert module wake-up pin
-                digitalWrite(wakePin, wakeAssertedState ? LOW : HIGH);
-            }
-        }
+        // assert module wake-up pin
+        digitalWrite(wakePin, wakeAssertedState ? HIGH : LOW);
     }
     
-    // finished
-    return result;
+    if (packetMode)
+    {
+        // prefix the transmission with a <length> byte
+        // so module DMA can allocate and process faster
+        streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength, 1);
+    }
+    
+    // allow transmission
+    return 0;
+}
+
+void SilabsBGAPIDeviceBLE1XX::onPostTransmission()
+{
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIDeviceBLE1XX::onPostTransmission()");
+    
+    if (wakePin != -1)
+    {
+        // de-assert module wake-up pin
+        digitalWrite(wakePin, wakeAssertedState ? LOW : HIGH);
+    }
 }
 
 } // namespace Perilib

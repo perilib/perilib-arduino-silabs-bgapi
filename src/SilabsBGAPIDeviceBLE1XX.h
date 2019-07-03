@@ -53,7 +53,8 @@ public:
            packetMode = false;
        }
        
-    virtual int8_t sendPacket(uint16_t index, ...);
+    virtual int8_t onPreTransmission();
+    virtual void onPostTransmission();
        
     bool packetMode;
     
