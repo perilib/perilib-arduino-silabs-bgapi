@@ -47,8 +47,6 @@ public:
         header = (header_t *)&buffer[0];
     }
 
-    virtual int8_t prepareBufferAfterBuilding();
-    
     uint8_t messageType;
     uint8_t technologyType;
     uint8_t payloadLength;

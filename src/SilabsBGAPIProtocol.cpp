@@ -75,6 +75,31 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     return getPacketDefinitionFromBuffer(buffer, length, isTx, &packet->index, &packet->definition);
 }
 
+int8_t SilabsBGAPIProtocol::getPacketFromIndexAndArgs(StreamPacket *packet, uint16_t index, va_list argv, StreamParserGenerator *parserGenerator)
+{
+    // run base class implementation first
+    StreamProtocol::getPacketFromIndexAndArgs(packet, index, argv, parserGenerator);
+    
+    // get pointer to child class instance
+    SilabsBGAPIPacket *bgapiPacket = (SilabsBGAPIPacket *)packet;
+
+    // update metadata
+    if (index > maxResponseIndex)
+    {
+        // packet is event, not command/response
+        bgapiPacket->messageType = 1;
+    }
+    bgapiPacket->payloadLength = packet->bufferLength - 4;
+
+    // fill BGAPI packet header data
+    bgapiPacket->header->type = (bgapiPacket->messageType << 7) | (bgapiPacket->technologyType << 3) | (bgapiPacket->payloadLength >> 8);
+    bgapiPacket->header->length = (bgapiPacket->payloadLength & 0xFF);
+    bgapiPacket->header->groupId = packet->definition[0];
+    bgapiPacket->header->methodId = packet->definition[1];
+    
+    return Result::OK;
+}
+
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const uint8_t **packetDef)
 {
     PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPacketDefinitionFromIndex(");
