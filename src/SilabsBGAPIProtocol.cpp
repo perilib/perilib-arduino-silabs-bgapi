@@ -58,18 +58,11 @@ int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *b
     // ensure packet and buffer pointers are valid
     if (!packet || !buffer) return Result::NULL_POINTER;
     
-    // assign packet buffer (direct pointer, no copy)
-    packet->buffer = buffer;
-    packet->bufferLength = length;
-    
     // assign special metadata
     SilabsBGAPIPacket *bgapiPacket = (SilabsBGAPIPacket *)packet;
     bgapiPacket->messageType = (buffer[0] >> 7);
     bgapiPacket->technologyType = (buffer[0] >> 3) & 0xF;
     bgapiPacket->payloadLength = ((buffer[0] & 0x7) << 8) | buffer[1];
-    
-    // assign header pointer
-    bgapiPacket->header = (SilabsBGAPIPacket::header_t *)&packet->buffer[0];
     
     // get packet definition
     return getPacketDefinitionFromBuffer(buffer, length, isTx, &packet->index, &packet->definition);
