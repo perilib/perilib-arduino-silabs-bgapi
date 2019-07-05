@@ -1,11 +1,55 @@
 #include <Perilib_Silabs_BGAPI.h>
 
-#define BLE1XX_MODULE_UART_BAUD_RATE        38400
-#define BLE1XX_MODULE_USE_PACKET_MODE       1
-#define BLE1XX_MODULE_WAKE_PIN              2
-#define BLE1XX_MODULE_WAKE_ASSERTED_STATE   HIGH
+#define BLE1XX_UART_BAUD_RATE           38400
+#define BLE1XX_USE_PACKET_MODE          1
+#define BLE1XX_WAKE_PIN                 2
+#define BLE1XX_WAKE_PIN_ASSERTED_STATE  HIGH
+#define BLE1XX_RESET_PIN                3
 
 Perilib::SilabsBGAPIDeviceBLE1XX device(&Serial1);
+
+// track intervals between commands
+uint32_t t0;
+
+void setup() {
+  // assign callbacks
+  device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
+  
+  // uncomment the following to use BGAPI in "packet" mode
+  // (<length> prefix byte for outgoing transmissions)
+  device.packetMode = BLE1XX_USE_PACKET_MODE;
+
+  // configure GPIO control
+  device.wakePin = BLE1XX_WAKE_PIN;
+  device.wakePinAssertedState = BLE1XX_WAKE_PIN_ASSERTED_STATE;
+  device.resetPin = BLE1XX_RESET_PIN;
+  
+  // wait until host opens serial port
+  while (!Serial);
+  
+  // initialize host serial interface for monitoring
+  Serial.begin(9600);
+  
+  // initialize module serial interface for BGAPI communication
+  Serial1.begin(BLE1XX_UART_BAUD_RATE);
+  
+  // perform hardware reset on device
+  device.reset();
+
+  // initialize reference time
+  t0 = millis();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  device.process();
+  
+  // send system_hello command (ping) once every five seconds
+  if (millis() - t0 > 5000) {
+    t0 = millis();
+    device.sendPacket(Perilib::SilabsBGAPIProtocolBLE1XX::BLE_CMD_SYSTEM_HELLO);
+  }
+}
 
 int8_t onRxPacket(Perilib::StreamPacket *packet)
 {
@@ -55,39 +99,4 @@ int8_t onRxPacket(Perilib::StreamPacket *packet)
   
   // allow further processing (non-zero to prevent)
   return 0;
-}
-
-uint32_t t0;
-void setup() {
-  // assign callbacks
-  device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
-  
-  // uncomment the following to use BGAPI in "packet" mode
-  // (<length> prefix byte for outgoing transmissions)
-  device.packetMode = BLE1XX_MODULE_USE_PACKET_MODE;
-
-  // configure wake-up pin control
-  device.wakePin = BLE1XX_MODULE_WAKE_PIN;
-  device.wakeAssertedState = BLE1XX_MODULE_WAKE_ASSERTED_STATE;
-  
-  // wait until host opens serial port
-  while (!Serial);
-  
-  // initialize host serial interface for monitoring
-  Serial.begin(9600);
-  
-  // initialize module serial interface for BGAPI communication
-  Serial1.begin(BLE1XX_MODULE_UART_BAUD_RATE);
-  t0 = millis();
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-  device.process();
-  
-  // send system_hello command (ping) once every five seconds
-  if (millis() - t0 > 5000) {
-    t0 = millis();
-    device.sendPacket(Perilib::SilabsBGAPIProtocolBLE1XX::BLE_CMD_SYSTEM_HELLO);
-  }
 }
