@@ -21,27 +21,58 @@
  * DEALINGS IN THE SOFTWARE.
  */
  
-#include "SilabsBGAPIDeviceBLE1XX.h"
+#include "SilabsBGAPIDevice.h"
 
 namespace Perilib
 {
 
-    int8_t SilabsBGAPIDeviceBLE1XX::onPreTransmission()
-    {
-        PERILIB_DEBUG_PRINTLN("SilabsBGAPIDeviceBLE1XX::onPreTransmission()");
+int8_t SilabsBGAPIDevice::onPreTransmission()
+{
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIDevice::onPreTransmission()");
 
-        // run parent method first to assert wake-up pin, if configured
-        SilabsBGAPIDevice::onPreTransmission();
-    
-        if (packetMode)
-        {
-            // prefix the transmission with a <length> byte
-            // so module DMA can allocate and process faster
-            streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength, 1);
-        }
-        
-        // allow transmission
-        return 0;
+    if (wakePin != -1)
+    {
+        // assert module wake-up pin
+        pinMode(wakePin, wakePinAssertedMode);
+        digitalWrite(wakePin, wakePinAssertedState ? HIGH : LOW);
     }
+    
+    // allow transmission
+    return 0;
+}
+
+void SilabsBGAPIDevice::onPostTransmission()
+{
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIDevice::onPostTransmission()");
+    
+    if (wakePin != -1)
+    {
+        // de-assert module wake-up pin
+        pinMode(wakePin, wakePinDeassertedMode);
+        digitalWrite(wakePin, wakePinAssertedState ? LOW : HIGH);
+    }
+}
+
+int8_t SilabsBGAPIDevice::reset()
+{
+    PERILIB_DEBUG_PRINTLN("SilabsBGAPIDevice::reset()");
+
+    if (resetPin != -1)
+    {
+        // assert module reset pin
+        pinMode(resetPin, resetPinAssertedMode);
+        digitalWrite(resetPin, resetPinAssertedState ? HIGH : LOW);
+        
+        // wait a moment
+        delay(5);
+        
+        // de-assert module reset pin
+        pinMode(resetPin, resetPinDeassertedMode);
+        digitalWrite(resetPin, resetPinAssertedState ? LOW : HIGH);
+    }
+    
+    // allow transmission
+    return 0;
+}
 
 } // namespace Perilib

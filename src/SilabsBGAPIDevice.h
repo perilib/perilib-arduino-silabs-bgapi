@@ -47,16 +47,36 @@ public:
             // set par/gen related stream object to self
             parserGenerator.streamPtr = (Stream *)&stream;
             
-            // set default wake-up pin behavior (disabled, active-high)
+            // set default reset pin behavior (disabled, active-low, open-drain)
+            resetPin = -1;
+            resetPinAssertedState = LOW;
+            resetPinAssertedMode = OUTPUT;
+            resetPinDeassertedMode = INPUT;
+
+            // set default wake-up pin behavior (disabled, active-high, push-pull)
             wakePin = -1;
-            wakeAssertedState = HIGH;
+            wakePinAssertedState = HIGH;
+            wakePinAssertedMode = OUTPUT;
+            wakePinDeassertedMode = OUTPUT;
         }
+    
+    virtual int8_t onPreTransmission();
+    virtual void onPostTransmission();
+
+    int8_t reset();
     
     StreamParserGenerator parserGenerator;
     UartStream stream;
     
+    int8_t resetPin;
+    uint8_t resetPinAssertedState;
+    uint8_t resetPinAssertedMode;
+    uint8_t resetPinDeassertedMode;
+    
     int8_t wakePin;
-    uint8_t wakeAssertedState;
+    uint8_t wakePinAssertedState;
+    uint8_t wakePinAssertedMode;
+    uint8_t wakePinDeassertedMode;
 };
 
 } // namespace Perilib

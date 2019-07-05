@@ -54,7 +54,6 @@ public:
        }
        
     virtual int8_t onPreTransmission();
-    virtual void onPostTransmission();
        
     bool packetMode;
     
