@@ -6,7 +6,19 @@
 #define BLE1XX_WAKE_PIN_ASSERTED_STATE  HIGH
 #define BLE1XX_RESET_PIN                3
 
-Perilib::SilabsBGAPIDeviceBLE1XX device(&Serial1);
+#if defined(SERIAL_PORT_HARDWARE_OPEN)
+    // use the first open hardware serial port
+    #define BLESerial SERIAL_PORT_HARDWARE_OPEN
+#elif defined(SERIAL_PORT_HARDWARE) && SERIAL_PORT_HARDWARE != SERIAL_PORT_MONITOR
+    // use the first defined hardware serial port that isn't the monitor port
+    #define BLESerial SERIAL_PORT_HARDWARE
+#else
+    // assume no hardware ports available, switch to software (original Arduino Uno)
+    #include <SoftwareSerial.h>
+    SoftwareSerial BLESerial(10, 11); // RX, TX
+#endif
+
+Perilib::SilabsBGAPIDeviceBLE1XX device(&BLESerial);
 
 // track intervals between commands
 uint32_t t0;
@@ -31,7 +43,7 @@ void setup() {
   Serial.begin(9600);
   
   // initialize module serial interface for BGAPI communication
-  Serial1.begin(BLE1XX_UART_BAUD_RATE);
+  BLESerial.begin(BLE1XX_UART_BAUD_RATE);
   
   // perform hardware reset on device
   device.reset();
