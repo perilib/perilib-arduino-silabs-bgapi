@@ -1,0 +1,18 @@
+{
+  "name": "Perilib-Arduino-Silabs-BGAPI",
+  "description": "Comprehensive BGAPI protocol implementation for BLE1XX, BGM1XX, BT121, WF121, and WGM110 modules",
+  "keywords": "serial, i2c, spi, peripheral",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/perilib/perilib-arduino-silabs-bgapi.git"
+  },
+  "version": "0.1.0",
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms":
+  [
+    "atmelavr",
+    "atmelsam"
+  ]
+}
