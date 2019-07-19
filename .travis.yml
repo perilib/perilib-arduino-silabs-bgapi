@@ -36,6 +36,6 @@ install:
   - unzip master.zip
   - rm master.zip
   - mv perilib-arduino-core-master $HOME/Arduino/libraries
-  - find $HOME
+  - find $HOME/Arduino/
 script:
   - buildExampleSketch BLE1XX_demo
