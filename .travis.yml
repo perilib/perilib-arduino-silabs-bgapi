@@ -10,9 +10,6 @@ env:
     - BOARD="arduino:samd:mkr1000"
     - BOARD="Intel:arc32:arduino_101"
 before_install:
-  - wget https://github.com/perilib/perilib-arduino-core/archive/master.zip
-  - unzip master.zip
-  - mv perilib-arduino-core-master Perilib
   - wget http://downloads.arduino.cc/arduino-cli/arduino-cli-$CLI_VERSION-linux64.tar.bz2
   - tar xf arduino-cli-$CLI_VERSION-linux64.tar.bz2
   - mkdir -p $HOME/bin
@@ -35,5 +32,9 @@ before_install:
 install:
   - mkdir -p $HOME/Arduino/libraries
   - ln -s $PWD $HOME/Arduino/libraries/.
+  - wget https://github.com/perilib/perilib-arduino-core/archive/master.zip
+  - unzip master.zip
+  - rm master.zip
+  - mv perilib-arduino-core-master $HOME/Arduino/libraries
 script:
   - buildExampleSketch BLE1XX_demo
