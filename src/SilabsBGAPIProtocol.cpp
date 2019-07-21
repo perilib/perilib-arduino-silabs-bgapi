@@ -29,6 +29,10 @@ namespace Perilib
 
 int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
+    // suppress unused parameter warnings
+    (void)parserGenerator;
+    (void)isTx;
+
     PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::testPacketComplete([...], ");
     PERILIB_DEBUG_PRINT(length);
     PERILIB_DEBUG_PRINTLN(", ...)");
@@ -51,6 +55,9 @@ int8_t SilabsBGAPIProtocol::testPacketComplete(const uint8_t *buffer, uint16_t l
 
 int8_t SilabsBGAPIProtocol::getPacketFromBuffer(StreamPacket *packet, uint8_t *buffer, uint16_t length, StreamParserGenerator *parserGenerator, bool isTx)
 {
+    // suppress unused parameter warnings
+    (void)parserGenerator;
+
     PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPacketFromBuffer(*{}, [...], ");
     PERILIB_DEBUG_PRINT(length);
     PERILIB_DEBUG_PRINTLN(", ...)");
@@ -149,6 +156,9 @@ int8_t SilabsBGAPIProtocol::getPacketDefinitionFromIndex(uint16_t index, const u
 
 int8_t SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(const uint8_t *buffer, uint16_t length, bool isTx, uint16_t *index, const uint8_t **packetDef)
 {
+    // suppress unused parameter warnings
+    (void)length;
+
     PERILIB_DEBUG_PRINTLN("SilabsBGAPIProtocol::getPacketDefinitionFromBuffer(...)");
 
     // ensure destination pointer is valid
@@ -245,6 +255,10 @@ const uint8_t *SilabsBGAPIProtocol::getFirstArgument(uint16_t index, const uint8
 
 uint16_t SilabsBGAPIProtocol::getPayloadOffset(uint16_t index, const uint8_t *packetDef)
 {
+    // suppress unused parameter warnings
+    (void)index;
+    (void)packetDef;
+
     PERILIB_DEBUG_PRINT("SilabsBGAPIProtocol::getPayloadOffset(");
     PERILIB_DEBUG_PRINT(index);
     PERILIB_DEBUG_PRINTLN(", ...)");
