@@ -12,6 +12,8 @@
 #elif defined(SERIAL_PORT_HARDWARE) && SERIAL_PORT_HARDWARE != SERIAL_PORT_MONITOR
     // use the first defined hardware serial port that isn't the monitor port
     #define BLESerial SERIAL_PORT_HARDWARE
+#elif defined(ESP32)
+    #define BLESerial Serial1
 #else
     // assume no hardware ports available, switch to software (original Arduino Uno)
     #include <SoftwareSerial.h>
