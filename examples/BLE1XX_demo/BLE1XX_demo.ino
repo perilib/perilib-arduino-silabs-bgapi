@@ -6,14 +6,8 @@
 #define BLE1XX_WAKE_PIN_ASSERTED_STATE  HIGH
 #define BLE1XX_RESET_PIN                3
 
-#if defined(SERIAL_PORT_HARDWARE_OPEN)
-    // use the first open hardware serial port
-    #define BLESerial SERIAL_PORT_HARDWARE_OPEN
-#elif defined(SERIAL_PORT_HARDWARE) && SERIAL_PORT_HARDWARE != SERIAL_PORT_MONITOR
-    // use the first defined hardware serial port that isn't the monitor port
-    #define BLESerial SERIAL_PORT_HARDWARE
-#elif defined(ESP32)
-    #define BLESerial Serial1
+#ifdef SERIAL_PORT_PERILIB
+    #define BLESerial SERIAL_PORT_PERILIB
 #else
     // assume no hardware ports available, switch to software (original Arduino Uno)
     #include <SoftwareSerial.h>
