@@ -36,13 +36,13 @@ class SilabsBGAPIDevice : public StreamDevice
 {
 public:
     SilabsBGAPIDevice(
-        ::Stream *arduinoUart,
+        ::Stream *arduinoStreamPtr,
         SilabsBGAPIProtocol *protocol,
         SilabsBGAPIPacket *lastRxPacket,
         SilabsBGAPIPacket *lastTxPacket)
             : StreamDevice(&stream),
               parserGenerator(protocol, lastRxPacket, lastTxPacket),
-              stream(arduinoUart, &parserGenerator, this)
+              stream(arduinoStreamPtr, &parserGenerator, this)
         {
             // set par/gen related stream object to self
             parserGenerator.streamPtr = (Stream *)&stream;
@@ -66,7 +66,7 @@ public:
     int8_t reset();
     
     StreamParserGenerator parserGenerator;
-    UartStream stream;
+    UartStream_ArduinoStream stream;
     
     int8_t resetPin;
     uint8_t resetPinAssertedState;
