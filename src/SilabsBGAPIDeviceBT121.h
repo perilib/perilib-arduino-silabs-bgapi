@@ -38,24 +38,24 @@ namespace Perilib
 class SilabsBGAPIDeviceBT121 : public SilabsBGAPIDevice
 {
 public:
-    SilabsBGAPIDeviceBT121(::Stream *arduinoUart)
+    SilabsBGAPIDeviceBT121(Stream *streamPtr)
             : SilabsBGAPIDevice(
-                arduinoUart,
+                streamPtr,
                 &protocol,
-                &lastRxPacket,
-                &lastTxPacket),
-              lastRxPacket(rxBuffer, sizeof(rxBuffer)),
-              lastTxPacket(txBuffer, sizeof(txBuffer))
+                &rxPacket,
+                &txPacket),
+              rxPacket(rxBuffer, sizeof(rxBuffer)),
+              txPacket(txBuffer, sizeof(txBuffer))
        {
-           lastRxPacket.technologyType = 4;
-           lastTxPacket.technologyType = 4;
+           rxPacket.technologyType = 4;
+           txPacket.technologyType = 4;
        }
     
 protected:
     uint8_t rxBuffer[SILABS_BGAPI_BT121_MAX_RX_PACKET_SIZE];
     uint8_t txBuffer[SILABS_BGAPI_BT121_MAX_TX_PACKET_SIZE];
-    SilabsBGAPIPacket lastRxPacket;
-    SilabsBGAPIPacket lastTxPacket;
+    SilabsBGAPIPacket rxPacket;
+    SilabsBGAPIPacket txPacket;
     SilabsBGAPIProtocolBT121 protocol;
 };
 

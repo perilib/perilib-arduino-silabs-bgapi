@@ -39,17 +39,17 @@ namespace Perilib
 class SilabsBGAPIDeviceBLE1XX : public SilabsBGAPIDevice
 {
 public:
-    SilabsBGAPIDeviceBLE1XX(::Stream *arduinoUart)
+    SilabsBGAPIDeviceBLE1XX(Stream *streamPtr)
             : SilabsBGAPIDevice(
-                arduinoUart,
+                streamPtr,
                 &protocol,
-                &lastRxPacket,
-                &lastTxPacket),
-              lastRxPacket(rxBuffer, sizeof(rxBuffer)),
-              lastTxPacket(txBuffer, sizeof(txBuffer))
+                &rxPacket,
+                &txPacket),
+              rxPacket(rxBuffer, sizeof(rxBuffer)),
+              txPacket(txBuffer, sizeof(txBuffer))
        {
-           lastRxPacket.technologyType = 0;
-           lastTxPacket.technologyType = 0;
+           rxPacket.technologyType = 0;
+           txPacket.technologyType = 0;
            packetMode = false;
        }
        
@@ -60,8 +60,8 @@ public:
 protected:
     uint8_t rxBuffer[SILABS_BGAPI_BLE1XX_MAX_RX_PACKET_SIZE];
     uint8_t txBuffer[SILABS_BGAPI_BLE1XX_MAX_TX_PACKET_SIZE];
-    SilabsBGAPIPacketBLE1XX lastRxPacket;
-    SilabsBGAPIPacketBLE1XX lastTxPacket;
+    SilabsBGAPIPacketBLE1XX rxPacket;
+    SilabsBGAPIPacketBLE1XX txPacket;
     SilabsBGAPIProtocolBLE1XX protocol;
 };
 

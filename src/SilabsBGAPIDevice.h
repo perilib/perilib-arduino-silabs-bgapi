@@ -36,16 +36,22 @@ class SilabsBGAPIDevice : public StreamDevice
 {
 public:
     SilabsBGAPIDevice(
-        ::Stream *arduinoStreamPtr,
-        SilabsBGAPIProtocol *protocol,
-        SilabsBGAPIPacket *lastRxPacket,
-        SilabsBGAPIPacket *lastTxPacket)
-            : StreamDevice(&stream),
-              parserGenerator(protocol, lastRxPacket, lastTxPacket),
-              stream(arduinoStreamPtr, &parserGenerator, this)
+        Stream *streamPtr,
+        SilabsBGAPIProtocol *protocolPtr,
+        SilabsBGAPIPacket *rxPacketPtr,
+        SilabsBGAPIPacket *txPacketPtr)
+            : StreamDevice(streamPtr),
+              parserGenerator(protocolPtr, rxPacketPtr, txPacketPtr),
+              streamPtr(streamPtr)
         {
-            // set par/gen related stream object to self
-            parserGenerator.streamPtr = (Stream *)&stream;
+            // set stream-related device object to self
+            streamPtr->devicePtr = this;
+            
+            // set stream-related par/gen object to own par/gen object
+            streamPtr->parserGeneratorPtr = &parserGenerator;
+            
+            // set par/gen-related stream object to own stream pointer
+            parserGenerator.streamPtr = streamPtr;
             
             // set default reset pin behavior (disabled, active-low, open-drain)
             resetPin = -1;
@@ -66,7 +72,7 @@ public:
     int8_t reset();
     
     StreamParserGenerator parserGenerator;
-    UartStream_ArduinoStream stream;
+    Stream *streamPtr;
     
     int8_t resetPin;
     uint8_t resetPinAssertedState;

@@ -14,14 +14,15 @@
     SoftwareSerial BLESerial(10, 11); // RX, TX
 #endif
 
-Perilib::SilabsBGAPIDeviceBLE1XX device(&BLESerial);
+Perilib::UartStream_ArduinoStream peripheralStream(&BLESerial);
+Perilib::SilabsBGAPIDeviceBLE1XX device(&peripheralStream);
 
 // track intervals between commands
 uint32_t t0;
 
 void setup() {
   // assign callbacks
-  device.stream.parserGeneratorPtr->onRxPacket = onRxPacket;
+  device.streamPtr->parserGeneratorPtr->onRxPacket = onRxPacket;
   
   // uncomment the following to use BGAPI in "packet" mode
   // (<length> prefix byte for outgoing transmissions)
