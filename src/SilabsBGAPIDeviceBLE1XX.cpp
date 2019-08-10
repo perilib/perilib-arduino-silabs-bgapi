@@ -37,7 +37,7 @@ namespace Perilib
         {
             // prefix the transmission with a <length> byte
             // so module DMA can allocate and process faster
-            streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->lastTxPacketPtr->bufferLength, 1);
+            streamPtr->write((uint8_t *)&streamPtr->parserGeneratorPtr->txPacketPtr->bufferLength, 1);
         }
         
         // allow transmission
