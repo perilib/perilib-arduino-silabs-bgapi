@@ -7,14 +7,14 @@
 #define BLE1XX_RESET_PIN                3
 
 #ifdef SERIAL_PORT_PERILIB
-    #define BLESerial SERIAL_PORT_PERILIB
+    #define PeripheralSerial SERIAL_PORT_PERILIB
 #else
     // assume no hardware ports available, switch to software (original Arduino Uno)
     #include <SoftwareSerial.h>
-    SoftwareSerial BLESerial(10, 11); // RX, TX
+    SoftwareSerial PeripheralSerial(10, 11); // RX, TX
 #endif
 
-Perilib::UartStream_ArduinoStream peripheralStream(&BLESerial);
+Perilib::UartStream_ArduinoStream peripheralStream(&PeripheralSerial);
 Perilib::SilabsBGAPIDeviceBLE1XX device(&peripheralStream);
 
 // track intervals between commands
@@ -40,7 +40,7 @@ void setup() {
   Serial.begin(9600);
   
   // initialize module serial interface for BGAPI communication
-  BLESerial.begin(BLE1XX_UART_BAUD_RATE);
+  PeripheralSerial.begin(BLE1XX_UART_BAUD_RATE);
   
   // perform hardware reset on device
   device.reset();
